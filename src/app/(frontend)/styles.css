@@ -1,5 +1,27 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@theme {
+  --animate-marquee: marquee 30s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
 :root {
   --font-mono: 'Roboto Mono', monospace;
+}
+
+.animate-marquee {
+  display: flex;
+  width: fit-content;
+}
+
+::selection {
+  background-color: #fdfcf0;
+  color: #000;
 }
 
 * {
