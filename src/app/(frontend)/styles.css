@@ -1,6 +1,6 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -8,50 +8,54 @@
   --animate-marquee: marquee 30s linear infinite;
 
   @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
 }
 
 :root {
-  --font-mono: 'Roboto Mono', monospace;
+  --font-mono: 'Cousine', monospace;
   --radius: 0.625rem;
-  
+
   /* Theme: Dark (Default) */
   --background: oklch(0.05 0 0); /* #0a0a0a approx */
   --foreground: oklch(0.98 0.02 100); /* #fdfcf0 approx */
-  
+
   --card: oklch(0.05 0 0);
   --card-foreground: oklch(0.98 0.02 100);
-  
+
   --popover: oklch(0.05 0 0);
   --popover-foreground: oklch(0.98 0.02 100);
-  
+
   --primary: oklch(0.98 0.02 100); /* #fdfcf0 */
   --primary-foreground: oklch(0.05 0 0); /* #0a0a0a */
-  
+
   --secondary: oklch(0.2 0 0); /* zinc-900 approx */
   --secondary-foreground: oklch(0.98 0.02 100);
-  
+
   --muted: oklch(0.2 0 0);
   --muted-foreground: oklch(0.7 0 0); /* zinc-400 approx */
-  
+
   --accent: oklch(0.2 0 0);
   --accent-foreground: oklch(0.98 0.02 100);
-  
+
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.98 0.02 100);
-  
+
   --border: oklch(0.3 0 0); /* zinc-800 approx */
   --input: oklch(0.3 0 0);
   --ring: oklch(0.707 0.022 261.325);
-  
+
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  
+
   --sidebar: oklch(0.05 0 0);
   --sidebar-foreground: oklch(0.98 0.02 100);
   --sidebar-primary: oklch(0.98 0.02 100);
@@ -90,7 +94,6 @@ body,
 }
 
 body {
-  font-family: 'Cousine', monospace;
   font-size: 18px;
   line-height: 32px;
   margin: 0;

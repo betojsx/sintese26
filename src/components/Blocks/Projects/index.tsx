@@ -3,7 +3,10 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Media, Page, Project } from '@/payload-types'
 
-type ProjectsBlockProps = Extract<NonNullable<Page['layout']>[number], { blockType: 'projects-block' }> & {
+type ProjectsBlockProps = Extract<
+  NonNullable<Page['layout']>[number],
+  { blockType: 'projects-block' }
+> & {
   projects: Project[]
 }
 
@@ -48,6 +51,8 @@ const ProjectCard = ({
 export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ title, subtitle, projects }) => {
   const hasProjects = projects && projects.length > 0
 
+  if (!hasProjects) return null
+
   return (
     <section id="work" className="px-6 md:px-12 py-24 border-b border-border">
       <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
@@ -65,7 +70,7 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ title, subtitle, p
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
-        {hasProjects ? (
+        {hasProjects &&
           projects.map((project, i) => {
             const gridClass = 'md:col-span-1 md:row-span-1'
             return (
@@ -77,14 +82,7 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ title, subtitle, p
                 className={gridClass}
               />
             )
-          })
-        ) : (
-          <div className="md:col-span-4 py-20 text-center border border-dashed border-border">
-            <p className="text-muted-foreground uppercase tracking-[0.2em]">
-              Carregando projetos do portfólio...
-            </p>
-          </div>
-        )}
+          })}
       </div>
 
       <div className="flex justify-center mt-12">

@@ -31,7 +31,7 @@ export const Nav = async () => {
             loop={false}
             loopDelay={0}
             tag="h1"
-            style={{ fontSize: '1.8rem' }}
+            style={{ fontSize: '1.8rem', margin: 0 }}
           />
         </Link>
       </div>
