@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     projects: Project;
+    pages: Page;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -89,8 +91,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -197,6 +203,86 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  slug: string;
+  layout?:
+    | (
+        | {
+            title: string;
+            description: string;
+            cta1?: {
+              label?: string | null;
+              link?: string | null;
+            };
+            cta2?: {
+              label?: string | null;
+              link?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            items?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'features';
+          }
+        | {
+            title: string;
+            subtitle?: string | null;
+            showMarquee?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stack';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'projects-block';
+          }
+        | {
+            title?: string | null;
+            steps?:
+              | {
+                  stepNumber?: string | null;
+                  title: string;
+                  description: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'process';
+          }
+        | {
+            title?: string | null;
+            description?: string | null;
+            email?: string | null;
+            whatsappNumber?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contact';
+          }
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -230,6 +316,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -334,6 +424,95 @@ export interface ProjectsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              cta1?:
+                | T
+                | {
+                    label?: T;
+                    link?: T;
+                  };
+              cta2?:
+                | T
+                | {
+                    label?: T;
+                    link?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        features?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stack?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              showMarquee?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'projects-block'?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        process?:
+          | T
+          | {
+              title?: T;
+              steps?:
+                | T
+                | {
+                    stepNumber?: T;
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        contact?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              email?: T;
+              whatsappNumber?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -371,6 +550,38 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  general: {
+    title: string;
+    logo?: (number | null) | Media;
+    favicon?: (number | null) | Media;
+    cnpj?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  general?:
+    | T
+    | {
+        title?: T;
+        logo?: T;
+        favicon?: T;
+        cnpj?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
