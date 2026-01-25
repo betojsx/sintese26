@@ -431,7 +431,7 @@ const Features: React.FC<BentoProps> = ({
         <h2 className="text-3xl md:text-5xl font-bold text-[#fdfcf0] mb-4 uppercase tracking-tight">
           O que fazemos
         </h2>
-        <p className="text-zinc-400 max-w-2xl mx-auto">
+        <p className="text-zinc-400">
           Descubra como nossa plataforma pode transformar sua experiência.
         </p>
       </div>
