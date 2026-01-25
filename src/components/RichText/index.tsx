@@ -17,9 +17,9 @@ export const RichText: React.FC<Props> = ({ data }) => {
         ...defaultConverters,
         blocks: {
           ...defaultConverters.blocks,
-          code: ({ node }) => <CodeBlock node={node} />,
-          Code: ({ node }) => <CodeBlock node={node} />,
-          video: ({ node }) => <VideoBlock video={node.fields.video} settings={node.fields.settings} />,
+          code: ({ node }: { node: any }) => <CodeBlock node={node} />,
+          Code: ({ node }: { node: any }) => <CodeBlock node={node} />,
+          video: ({ node }: { node: any }) => <VideoBlock video={node.fields.video} settings={node.fields.settings} />,
         },
       })}
     />
