@@ -1,7 +1,12 @@
 'use client'
 
-import React, { useRef, useEffect, useCallback, useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { gsap } from 'gsap'
+import { useInView } from 'motion/react'
+import { LaptopMinimalCheckIcon } from '@/components/ui/laptop-minimal-check'
+import { VibrateIcon } from '@/components/ui/vibrate'
+import { MessageCircleIcon } from '@/components/ui/message-circle'
+import { CpuIcon } from '@/components/ui/cpu'
 
 export interface BentoCardProps {
   color?: string
@@ -10,86 +15,63 @@ export interface BentoCardProps {
   label?: string
   textAutoHide?: boolean
   disableAnimations?: boolean
+  Icon: React.ElementType
 }
 
 export interface BentoProps {
   textAutoHide?: boolean
-  enableStars?: boolean
   enableSpotlight?: boolean
   enableBorderGlow?: boolean
   disableAnimations?: boolean
   spotlightRadius?: number
-  particleCount?: number
   enableTilt?: boolean
   glowColor?: string
   clickEffect?: boolean
   enableMagnetism?: boolean
 }
 
-const DEFAULT_PARTICLE_COUNT = 12
 const DEFAULT_SPOTLIGHT_RADIUS = 300
 const DEFAULT_GLOW_COLOR = '200, 200, 200'
 const MOBILE_BREAKPOINT = 768
 
 const cardData: BentoCardProps[] = [
   {
-    color: '#060010',
-    title: 'Analytics',
-    description: 'Track user behavior',
-    label: 'Insights',
+    title: 'Websites',
+    description: 'Desenvolvimento de sites modernos e responsivos para sua marca.',
+    label: 'Digital',
+    Icon: LaptopMinimalCheckIcon,
   },
   {
-    color: '#060010',
-    title: 'Dashboard',
-    description: 'Centralized data view',
-    label: 'Overview',
+    title: 'Aplicativos',
+    description: 'Apps nativos e multiplataforma com a melhor experiência de usuário.',
+    label: 'Mobile',
+    Icon: VibrateIcon,
   },
   {
-    color: '#060010',
-    title: 'Collaboration',
-    description: 'Work together seamlessly',
-    label: 'Teamwork',
+    title: 'Painel administrativo',
+    description: 'Gerenciamento completo do seu negócio com dashboards intuitivos.',
+    label: 'Gestão',
+    Icon: LaptopMinimalCheckIcon,
   },
   {
-    color: '#060010',
-    title: 'Automation',
-    description: 'Streamline workflows',
-    label: 'Efficiency',
+    title: 'Sites institucionais',
+    description: 'Fortaleça sua presença online com um site institucional profissional.',
+    label: 'Corporativo',
+    Icon: LaptopMinimalCheckIcon,
   },
   {
-    color: '#060010',
-    title: 'Integration',
-    description: 'Connect favorite tools',
-    label: 'Connectivity',
+    title: 'Whatsapp Chatbots',
+    description: 'Automatize seu atendimento e venda mais pelo WhatsApp.',
+    label: 'Automação',
+    Icon: MessageCircleIcon,
   },
   {
-    color: '#060010',
-    title: 'Security',
-    description: 'Enterprise-grade protection',
-    label: 'Protection',
+    title: 'Hospedagem',
+    description: 'Servidores rápidos e seguros para manter seus serviços sempre online.',
+    label: 'Infraestrutura',
+    Icon: CpuIcon,
   },
 ]
-
-const createParticleElement = (
-  x: number,
-  y: number,
-  color: string = DEFAULT_GLOW_COLOR,
-): HTMLDivElement => {
-  const el = document.createElement('div')
-  el.className = 'particle'
-  el.style.cssText = `
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: rgba(${color}, 1);
-    box-shadow: 0 0 6px rgba(${color}, 0.6);
-    pointer-events: none;
-    z-index: 100;
-    left: ${x}px;
-    top: ${y}px;
-  `
-  return el
-}
 
 const calculateSpotlightValues = (radius: number) => ({
   proximity: radius * 0.5,
@@ -113,107 +95,39 @@ const updateCardGlowProperties = (
   card.style.setProperty('--glow-radius', `${radius}px`)
 }
 
-const ParticleCard: React.FC<{
+const InteractiveCard: React.FC<{
   children: React.ReactNode
   className?: string
   disableAnimations?: boolean
   style?: React.CSSProperties
-  particleCount?: number
   glowColor?: string
   enableTilt?: boolean
   clickEffect?: boolean
   enableMagnetism?: boolean
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
 }> = ({
   children,
   className = '',
   disableAnimations = false,
   style,
-  particleCount = DEFAULT_PARTICLE_COUNT,
   glowColor = DEFAULT_GLOW_COLOR,
   enableTilt = true,
   clickEffect = false,
   enableMagnetism = false,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null)
-  const particlesRef = useRef<HTMLDivElement[]>([])
-  const timeoutsRef = useRef<number[]>([])
   const isHoveredRef = useRef(false)
-  const memoizedParticles = useRef<HTMLDivElement[]>([])
-  const particlesInitialized = useRef(false)
   const magnetismAnimationRef = useRef<gsap.core.Tween | null>(null)
+  const onMouseEnterRef = useRef(onMouseEnter)
+  const onMouseLeaveRef = useRef(onMouseLeave)
 
-  const initializeParticles = useCallback(() => {
-    if (particlesInitialized.current || !cardRef.current) return
-
-    const { width, height } = cardRef.current.getBoundingClientRect()
-    memoizedParticles.current = Array.from({ length: particleCount }, () =>
-      createParticleElement(Math.random() * width, Math.random() * height, glowColor),
-    )
-    particlesInitialized.current = true
-  }, [particleCount, glowColor])
-
-  const clearAllParticles = useCallback(() => {
-    timeoutsRef.current.forEach(clearTimeout)
-    timeoutsRef.current = []
-    magnetismAnimationRef.current?.kill()
-
-    particlesRef.current.forEach((particle) => {
-      gsap.to(particle, {
-        scale: 0,
-        opacity: 0,
-        duration: 0.3,
-        ease: 'back.in(1.7)',
-        onComplete: () => {
-          particle.parentNode?.removeChild(particle)
-        },
-      })
-    })
-    particlesRef.current = []
-  }, [])
-
-  const animateParticles = useCallback(() => {
-    if (!cardRef.current || !isHoveredRef.current) return
-
-    if (!particlesInitialized.current) {
-      initializeParticles()
-    }
-
-    memoizedParticles.current.forEach((particle, index) => {
-      const timeoutId = setTimeout(() => {
-        if (!isHoveredRef.current || !cardRef.current) return
-
-        const clone = particle.cloneNode(true) as HTMLDivElement
-        cardRef.current?.appendChild(clone)
-        particlesRef.current.push(clone)
-
-        gsap.fromTo(
-          clone,
-          { scale: 0, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.7)' },
-        )
-
-        gsap.to(clone, {
-          x: (Math.random() - 0.5) * 100,
-          y: (Math.random() - 0.5) * 100,
-          rotation: Math.random() * 360,
-          duration: 2 + Math.random() * 2,
-          ease: 'none',
-          repeat: -1,
-          yoyo: true,
-        })
-
-        gsap.to(clone, {
-          opacity: 0.3,
-          duration: 1.5,
-          ease: 'power2.inOut',
-          repeat: -1,
-          yoyo: true,
-        })
-      }, index * 100)
-
-      timeoutsRef.current.push(Number(timeoutId))
-    })
-  }, [initializeParticles])
+  useEffect(() => {
+    onMouseEnterRef.current = onMouseEnter
+    onMouseLeaveRef.current = onMouseLeave
+  }, [onMouseEnter, onMouseLeave])
 
   useEffect(() => {
     if (disableAnimations || !cardRef.current) return
@@ -222,7 +136,7 @@ const ParticleCard: React.FC<{
 
     const handleMouseEnter = () => {
       isHoveredRef.current = true
-      animateParticles()
+      onMouseEnterRef.current?.()
 
       if (enableTilt) {
         gsap.to(element, {
@@ -237,7 +151,7 @@ const ParticleCard: React.FC<{
 
     const handleMouseLeave = () => {
       isHoveredRef.current = false
-      clearAllParticles()
+      onMouseLeaveRef.current?.()
 
       if (enableTilt) {
         gsap.to(element, {
@@ -349,17 +263,8 @@ const ParticleCard: React.FC<{
       element.removeEventListener('mouseleave', handleMouseLeave)
       element.removeEventListener('mousemove', handleMouseMove)
       element.removeEventListener('click', handleClick)
-      clearAllParticles()
     }
-  }, [
-    animateParticles,
-    clearAllParticles,
-    disableAnimations,
-    enableTilt,
-    enableMagnetism,
-    clickEffect,
-    glowColor,
-  ])
+  }, [disableAnimations, enableTilt, enableMagnetism, clickEffect, glowColor])
 
   return (
     <div
@@ -383,42 +288,15 @@ const GlobalSpotlight: React.FC<{
   disableAnimations = false,
   enabled = true,
   spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
-  glowColor = DEFAULT_GLOW_COLOR,
 }) => {
-  const spotlightRef = useRef<HTMLDivElement | null>(null)
   const isInsideSection = useRef(false)
 
   useEffect(() => {
     if (disableAnimations || !gridRef?.current || !enabled) return
 
-    const spotlight = document.createElement('div')
-    spotlight.className = 'global-spotlight'
-    spotlight.style.cssText = `
-      position: fixed;
-      width: 800px;
-      height: 800px;
-      border-radius: 50%;
-      pointer-events: none;
-      background: radial-gradient(circle,
-        rgba(${glowColor}, 0.15) 0%,
-        rgba(${glowColor}, 0.08) 15%,
-        rgba(${glowColor}, 0.04) 25%,
-        rgba(${glowColor}, 0.02) 40%,
-        rgba(${glowColor}, 0.01) 65%,
-        transparent 70%
-      );
-      z-index: 200;
-      opacity: 0;
-      transform: translate(-50%, -50%);
-      mix-blend-mode: screen;
-    `
-    document.body.appendChild(spotlight)
-    spotlightRef.current = spotlight
-
     const handleMouseMove = (e: MouseEvent) => {
-      if (!spotlightRef.current || !gridRef.current) return
+      if (!gridRef.current) return
 
-      // Use a more generic selector if classes aren't perfect, but let's stick to the refs
       const section = gridRef.current
       const rect = section?.getBoundingClientRect()
       const mouseInside =
@@ -429,15 +307,9 @@ const GlobalSpotlight: React.FC<{
         e.clientY <= rect.bottom
 
       isInsideSection.current = mouseInside || false
-      // Find children that are cards
       const cards = Array.from(gridRef.current.children) as HTMLElement[]
 
       if (!mouseInside) {
-        gsap.to(spotlightRef.current, {
-          opacity: 0,
-          duration: 0.3,
-          ease: 'power2.out',
-        })
         cards.forEach((card) => {
           card.style.setProperty('--glow-intensity', '0')
         })
@@ -445,7 +317,6 @@ const GlobalSpotlight: React.FC<{
       }
 
       const { proximity, fadeDistance } = calculateSpotlightValues(spotlightRadius)
-      let minDistance = Infinity
 
       cards.forEach((card) => {
         const cardElement = card
@@ -457,8 +328,6 @@ const GlobalSpotlight: React.FC<{
           Math.max(cardRect.width, cardRect.height) / 2
         const effectiveDistance = Math.max(0, distance)
 
-        minDistance = Math.min(minDistance, effectiveDistance)
-
         let glowIntensity = 0
         if (effectiveDistance <= proximity) {
           glowIntensity = 1
@@ -467,26 +336,6 @@ const GlobalSpotlight: React.FC<{
         }
 
         updateCardGlowProperties(cardElement, e.clientX, e.clientY, glowIntensity, spotlightRadius)
-      })
-
-      gsap.to(spotlightRef.current, {
-        left: e.clientX,
-        top: e.clientY,
-        duration: 0.1,
-        ease: 'power2.out',
-      })
-
-      const targetOpacity =
-        minDistance <= proximity
-          ? 0.8
-          : minDistance <= fadeDistance
-            ? ((fadeDistance - minDistance) / (fadeDistance - proximity)) * 0.8
-            : 0
-
-      gsap.to(spotlightRef.current, {
-        opacity: targetOpacity,
-        duration: targetOpacity > 0 ? 0.2 : 0.5,
-        ease: 'power2.out',
       })
     }
 
@@ -498,13 +347,6 @@ const GlobalSpotlight: React.FC<{
           card.style.setProperty('--glow-intensity', '0')
         })
       }
-      if (spotlightRef.current) {
-        gsap.to(spotlightRef.current, {
-          opacity: 0,
-          duration: 0.3,
-          ease: 'power2.out',
-        })
-      }
     }
 
     document.addEventListener('mousemove', handleMouseMove)
@@ -513,9 +355,8 @@ const GlobalSpotlight: React.FC<{
     return () => {
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseleave', handleMouseLeave)
-      spotlightRef.current?.parentNode?.removeChild(spotlightRef.current)
     }
-  }, [gridRef, disableAnimations, enabled, spotlightRadius, glowColor])
+  }, [gridRef, disableAnimations, enabled, spotlightRadius])
 
   return null
 }
@@ -525,7 +366,7 @@ const BentoCardGrid: React.FC<{
   gridRef?: React.RefObject<HTMLDivElement | null>
 }> = ({ children, gridRef }) => (
   <div
-    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-6 mx-auto p-4"
+    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-6 md:px-12 mx-auto p-4"
     ref={gridRef}
   >
     {children}
@@ -549,12 +390,10 @@ const useMobileDetection = () => {
 
 const Features: React.FC<BentoProps> = ({
   textAutoHide = true,
-  enableStars = true,
   enableSpotlight = true,
   enableBorderGlow = true,
   disableAnimations = false,
   spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
-  particleCount = DEFAULT_PARTICLE_COUNT,
   enableTilt = false,
   glowColor = DEFAULT_GLOW_COLOR,
   clickEffect = true,
@@ -563,6 +402,18 @@ const Features: React.FC<BentoProps> = ({
   const gridRef = useRef<HTMLDivElement>(null)
   const isMobile = useMobileDetection()
   const shouldDisableAnimations = disableAnimations || isMobile
+  const iconRefs = useRef<any[]>([])
+  const isInView = useInView(gridRef, { once: true, amount: 0.2 })
+
+  useEffect(() => {
+    if (isInView) {
+      iconRefs.current.forEach((ref, index) => {
+        setTimeout(() => {
+          ref?.startAnimation()
+        }, index * 100)
+      })
+    }
+  }, [isInView])
 
   return (
     <section className="py-20 bg-[#0a0a0a]">
@@ -578,113 +429,87 @@ const Features: React.FC<BentoProps> = ({
 
       <div className="container mx-auto px-4 mb-12 text-center">
         <h2 className="text-3xl md:text-5xl font-bold text-[#fdfcf0] mb-4 uppercase tracking-tight">
-          Nossas Funcionalidades
+          O que fazemos
         </h2>
         <p className="text-zinc-400 max-w-2xl mx-auto">
           Descubra como nossa plataforma pode transformar sua experiência.
         </p>
       </div>
-
-      <BentoCardGrid gridRef={gridRef}>
-        {cardData.map((card, index) => {
-          // Construct class names with Tailwind
-          const baseClassName = `
+      <div className="container mx-auto">
+        <BentoCardGrid gridRef={gridRef}>
+          {cardData.map((card, index) => {
+            // Construct class names with Tailwind
+            const baseClassName = `
             relative group p-6 h-[300px] flex flex-col justify-between
-            bg-zinc-900 border border-zinc-800 overflow-hidden
+            bg-[#0a0a0a] border border-zinc-800 overflow-hidden
             ${enableBorderGlow ? 'hover:border-zinc-500/50' : ''}
           `
 
-          const cardProps = {
-            className: baseClassName,
-            style: {
-              '--glow-color': glowColor,
-              '--glow-x': '50%',
-              '--glow-y': '50%',
-              '--glow-intensity': '0',
-              '--glow-radius': `${spotlightRadius}px`,
-            } as React.CSSProperties,
-          }
+            const cardProps = {
+              className: baseClassName,
+              style: {
+                '--glow-color': glowColor,
+                '--glow-x': '50%',
+                '--glow-y': '50%',
+                '--glow-intensity': '0',
+                '--glow-radius': `${spotlightRadius}px`,
+              } as React.CSSProperties,
+            }
 
-          const GlowLayer = () => (
-            <div
-              className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-              style={{
-                opacity: 'var(--glow-intensity)',
-                background: `radial-gradient(
-                  var(--glow-radius) circle at var(--glow-x) var(--glow-y),
-                  rgba(${glowColor}, 0.15),
-                  transparent
-                )`,
-              }}
-            />
-          )
-
-          const BorderGlow = () =>
-            enableBorderGlow ? (
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  padding: '1px',
-                  background: `radial-gradient(
+            const BorderGlow = () =>
+              enableBorderGlow ? (
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    padding: '1px',
+                    background: `radial-gradient(
                    var(--glow-radius) circle at var(--glow-x) var(--glow-y), 
                    rgba(${glowColor}, var(--glow-intensity)), 
                    transparent 100%
                  )`,
-                  mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                  maskComposite: 'exclude',
-                  WebkitMaskComposite: 'xor', // For Safari
-                }}
-              />
-            ) : null
+                    mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                    maskComposite: 'exclude',
+                    WebkitMaskComposite: 'xor', // For Safari
+                  }}
+                />
+              ) : null
 
-          if (enableStars) {
             return (
-              <ParticleCard
+              <InteractiveCard
                 key={index}
                 {...cardProps}
                 disableAnimations={shouldDisableAnimations}
-                particleCount={particleCount}
                 glowColor={glowColor}
                 enableTilt={enableTilt}
                 clickEffect={clickEffect}
                 enableMagnetism={enableMagnetism}
+                onMouseEnter={() => iconRefs.current[index]?.startAnimation()}
+                onMouseLeave={() => iconRefs.current[index]?.stopAnimation()}
               >
-                <GlowLayer />
                 <BorderGlow />
                 <div className="flex justify-between items-start z-10 relative">
                   <div className="text-xs font-mono uppercase tracking-widest text-zinc-500 border border-zinc-800 px-2 py-1 bg-black/50 backdrop-blur-sm">
                     {card.label}
                   </div>
+                  <div className="opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+                    <card.Icon
+                      ref={(el: any) => (iconRefs.current[index] = el)}
+                      size={64}
+                      className="text-zinc-600 group-hover:text-[#fdfcf0] transition-colors duration-300"
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2 z-10 relative">
+                <div className="space-y-2 z-10 relative mt-auto">
                   <h2 className="text-2xl font-bold text-[#fdfcf0] group-hover:text-zinc-200 transition-colors">
                     {card.title}
                   </h2>
                   <p className="text-zinc-400 text-sm leading-relaxed">{card.description}</p>
                 </div>
-              </ParticleCard>
+              </InteractiveCard>
             )
-          }
-
-          return (
-            <div key={index} {...cardProps}>
-              <GlowLayer />
-              <BorderGlow />
-              <div className="flex justify-between items-start z-10 relative">
-                <div className="text-xs font-mono uppercase tracking-widest text-zinc-500 border border-zinc-800 px-2 py-1 bg-black/50 backdrop-blur-sm">
-                  {card.label}
-                </div>
-              </div>
-              <div className="space-y-2 z-10 relative">
-                <h2 className="text-2xl font-bold text-[#fdfcf0] group-hover:text-zinc-200 transition-colors">
-                  {card.title}
-                </h2>
-                <p className="text-zinc-400 text-sm leading-relaxed">{card.description}</p>
-              </div>
-            </div>
-          )
-        })}
-      </BentoCardGrid>
+          })}
+        </BentoCardGrid>
+      </div>
     </section>
   )
 }

@@ -15,12 +15,12 @@ export default async function ProjectsPage() {
   })
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#fdfcf0] font-['Cousine',monospace] selection:bg-[#fdfcf0] selection:text-black">
+    <div className="min-h-screen bg-[#0a0a0a] text-[#fdfcf0]   selection:bg-[#fdfcf0] selection:text-black">
       <Nav />
 
       <main className="px-6 md:px-12 py-20 max-w-7xl mx-auto">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#fdfcf0] transition-colors mb-12 uppercase text-xs tracking-widest"
         >
           <ArrowLeft size={14} /> Voltar para Home
@@ -38,17 +38,18 @@ export default async function ProjectsPage() {
         <div className="grid grid-cols-1 gap-12">
           {projects.length > 0 ? (
             projects.map((project) => {
-              const imageUrl = typeof project.image === 'object' ? (project.image as Media)?.url : ''
-              
+              const imageUrl =
+                typeof project.image === 'object' ? (project.image as Media)?.url : ''
+
               return (
-                <article 
-                  key={project.id} 
+                <article
+                  key={project.id}
                   className="group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border-b border-zinc-900 pb-12 hover:border-zinc-700 transition-colors"
                 >
                   <div className="lg:col-span-5 aspect-video overflow-hidden border border-zinc-800">
                     {imageUrl ? (
-                      <img 
-                        src={imageUrl} 
+                      <img
+                        src={imageUrl}
                         alt={project.title}
                         className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 scale-100 group-hover:scale-105"
                       />
@@ -58,7 +59,7 @@ export default async function ProjectsPage() {
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="lg:col-span-7 flex flex-col gap-4">
                     <div className="flex justify-between items-start">
                       <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight group-hover:text-[#fdfcf0] transition-colors">
@@ -68,13 +69,13 @@ export default async function ProjectsPage() {
                         {new Date(project.createdAt).getFullYear()}
                       </span>
                     </div>
-                    
+
                     <p className="text-zinc-500 text-lg leading-relaxed max-w-2xl">
                       {project.slug ? `/${project.slug}` : 'Sem slug definido.'}
                     </p>
-                    
+
                     <div className="flex gap-4 mt-4">
-                      <Link 
+                      <Link
                         href={`/projects/${project.slug}`}
                         className="inline-flex items-center gap-2 border border-zinc-700 px-6 py-3 font-bold uppercase text-xs hover:bg-zinc-900 transition-colors"
                       >
@@ -87,7 +88,9 @@ export default async function ProjectsPage() {
             })
           ) : (
             <div className="py-20 text-center border border-dashed border-zinc-800">
-              <p className="text-zinc-600 uppercase tracking-[0.2em]">Nenhum projeto encontrado no banco de dados.</p>
+              <p className="text-zinc-600 uppercase tracking-[0.2em]">
+                Nenhum projeto encontrado no banco de dados.
+              </p>
             </div>
           )}
         </div>

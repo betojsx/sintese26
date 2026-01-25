@@ -130,7 +130,7 @@ export const DefaultHome = ({ projects }: { projects: Project[] }) => {
   const hasProjects = projects.length > 0
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#fdfcf0] font-['Cousine',monospace] selection:bg-[#fdfcf0] selection:text-black">
+    <div className="min-h-screen bg-[#0a0a0a] text-[#fdfcf0]   selection:bg-[#fdfcf0] selection:text-black">
       <Nav />
 
       {/* Hero Section */}

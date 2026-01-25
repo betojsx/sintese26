@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -18,7 +18,7 @@
 }
 
 :root {
-  --font-mono: 'Cousine', monospace;
+  --font-sans: 'Work Sans', sans-serif;
   --radius: 0.625rem;
 
   /* Theme: Dark (Default) */
@@ -280,6 +280,6 @@ svg {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-['Cousine'];
+    @apply bg-background text-foreground font-sans;
   }
 }

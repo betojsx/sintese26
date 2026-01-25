@@ -585,6 +585,22 @@ export interface SiteSettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VideoBlock".
+ */
+export interface VideoBlock {
+  video: number | Media;
+  settings?: {
+    autoplay?: boolean | null;
+    muted?: boolean | null;
+    loop?: boolean | null;
+    controls?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'video';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {

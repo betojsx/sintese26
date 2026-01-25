@@ -8,7 +8,7 @@ import { Footer } from '@/components/Footer'
 
 export default async function App() {
   const payload = await getPayload({ config })
-  
+
   // Fetch Projects (shared data)
   const { docs: projects } = await payload.find({
     collection: 'projects',
@@ -42,13 +42,10 @@ export default async function App() {
   const whatsappNumber = contactBlock?.blockType === 'contact' ? contactBlock.whatsappNumber : null
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-mono selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
       <Nav />
       <RenderBlocks layout={homePage.layout} projects={projects} />
-      <Footer 
-        whatsappNumber={whatsappNumber} 
-        cnpj={siteSettings?.general?.cnpj}
-      />
+      <Footer whatsappNumber={whatsappNumber} cnpj={siteSettings?.general?.cnpj} />
     </div>
   )
 }

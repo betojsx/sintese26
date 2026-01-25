@@ -1,5 +1,10 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import {
+  BlockquoteFeature,
+  BlocksFeature,
+  CodeBlock,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { buildConfig } from 'payload'
 import path from 'path'
@@ -10,6 +15,7 @@ import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
 import { Pages } from './collections/Pages'
 import { SiteSettings } from './globals/SiteSettings'
+import { VideoBlock } from './blocks/Video'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,7 +29,29 @@ export default buildConfig({
   },
   collections: [Users, Media, Projects, Pages],
   globals: [SiteSettings],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      BlockquoteFeature(),
+      BlocksFeature({
+        blocks: [
+          CodeBlock({
+            languages: {
+              typescript: 'TypeScript',
+              bash: 'Bash',
+              html: 'HTML',
+              css: 'CSS',
+              json: 'JSON',
+            },
+            typescript: {
+              enableSemanticValidation: false
+            }
+          }),
+          VideoBlock,
+        ],
+      }),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
@@ -35,7 +63,6 @@ export default buildConfig({
   }),
   plugins: [
     s3Storage({
-      
       collections: {
         media: true,
       },
@@ -47,9 +74,7 @@ export default buildConfig({
           secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
         },
         region: 'auto',
-        
       },
-      
     }),
   ],
 })
