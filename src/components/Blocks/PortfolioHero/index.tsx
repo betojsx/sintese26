@@ -6,9 +6,9 @@ import BlurText from '@/components/BlurText'
 
 export const PortfolioHero = () => {
   return (
-    <section className="relative w-full min-h-[80vh] flex items-center pt-24 pb-12 overflow-hidden border-b border-border/40">
+    <section className="relative w-full min-h-[80vh] flex items-center pt-12 lg:pt-24 pb-12 lg:pb-24 overflow-hidden border-b border-border/40">
       <div className="container mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 lg:gap-12 items-center">
           {/* Text Content */}
           <div className="order-2 lg:order-1 flex flex-col justify-center">
             <div className="space-y-6">
@@ -69,7 +69,7 @@ export const PortfolioHero = () => {
           <div className="order-1 lg:order-2 relative flex justify-center lg:justify-end">
             <div className="relative w-full max-w-[500px] aspect-square lg:aspect-[4/5]">
               {/* Decorative elements */}
-              <div className="absolute top-10 right-10 w-full h-full border-2 border-primary/20 rounded-2xl z-0 transform translate-x-4 translate-y-4"></div>
+              <div className="absolute top-10 right-10 w-full h-full border-2 border-primary/20 rounded-2xl z-0 transform translate-x-6 lg:translate-x-4  lg:translate-y-4"></div>
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-2xl"></div>
 
               <div className="relative h-full w-full rounded-2xl overflow-hidden shadow-2xl z-10 bg-zinc-900/50 grayscale hover:grayscale-0 transition-all duration-700">

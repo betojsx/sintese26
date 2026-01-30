@@ -60,17 +60,8 @@ const PlaceholderCard = ({ className = '' }: { className?: string }) => {
 }
 
 export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ title, subtitle, projects = [] }) => {
-  // Bento grid configuration: we want 6 slots for a nice layout
-  const TOTAL_SLOTS = 6
-
   // Combine real projects with placeholders
   const displayItems = [...projects]
-  while (displayItems.length < TOTAL_SLOTS) {
-    displayItems.push({
-      id: `placeholder-${displayItems.length}`,
-      isPlaceholder: true,
-    } as any)
-  }
 
   const getBentoClass = (index: number) => {
     // 3-column grid layout pattern
@@ -80,13 +71,13 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ title, subtitle, p
 
     switch (index) {
       case 0:
-        return 'md:col-span-2 md:row-span-2 min-h-[500px]'
+        return 'md:col-span-2 md:row-span-2 min-h-[230px] lg:min-h-[500px]'
       case 1:
-        return 'md:col-span-1 md:row-span-1 min-h-[240px]'
+        return 'md:col-span-1 md:row-span-1 min-h-[230px]'
       case 2:
-        return 'md:col-span-1 md:row-span-1 min-h-[240px]'
+        return 'md:col-span-1 md:row-span-1 min-h-[230px]'
       default:
-        return 'md:col-span-1 md:row-span-1 min-h-[300px]'
+        return 'md:col-span-1 md:row-span-1 min-h-[230px] lg:min-h-[300px]'
     }
   }
 

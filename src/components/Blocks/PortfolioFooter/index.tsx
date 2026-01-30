@@ -7,7 +7,7 @@ import Link from 'next/link'
 export const PortfolioFooter = ({ cnpj }: { cnpj?: string }) => {
   return (
     <footer className="relative w-full border-t border-border/40 overflow-hidden">
-      <div className="h-[400px] w-full">
+      <div className="h-[500px] lg:h-[400px] w-full">
         <TopographyBackground
           lineColor="rgba(255, 255, 255, 0.1)"
           backgroundColor="hsl(var(--background))"
@@ -63,7 +63,7 @@ export const PortfolioFooter = ({ cnpj }: { cnpj?: string }) => {
               </div>
             </div>
 
-            <div className="absolute bottom-8 left-0 w-full px-6 md:px-12 flex flex-col md:flex-row justify-between items-center text-xs uppercase tracking-widest text-muted-foreground/40 border-t border-white/5 pt-8">
+            <div className="static lg:absolute bottom-8 left-0 w-full px-6 md:px-12 flex flex-col md:flex-row justify-between items-center text-xs uppercase tracking-widest text-muted-foreground/40 border-t border-white/5 pt-8">
               <span>© 2026 Roberto Silva. All rights reserved.</span>
               {cnpj && <span>CNPJ: {cnpj}</span>}
             </div>
