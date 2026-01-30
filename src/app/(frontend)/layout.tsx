@@ -1,7 +1,21 @@
 import React from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { Mona_Sans } from 'next/font/google'
+import localFont from 'next/font/local'
 import './styles.css'
+
+const monaSans = Mona_Sans({
+  subsets: ['latin'],
+  variable: '--font-mona-sans',
+  display: 'swap',
+})
+
+const monaspaceArgon = localFont({
+  src: '../../../public/assets/fonts/Monaspace Argon Var.woff2',
+  variable: '--font-monaspace-argon',
+  display: 'swap',
+})
 
 export async function generateMetadata() {
   const payload = await getPayload({ config })
@@ -26,7 +40,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={`${monaSans.variable} ${monaspaceArgon.variable}`}>
       <body>
         <main>{children}</main>
       </body>

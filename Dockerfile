@@ -21,13 +21,27 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+ARG PAYLOAD_SECRET
+ARG DATABASE_URL
+ARG R2_BUCKET
+ARG R2_ENDPOINT
+ARG R2_ACCESS_KEY_ID
+ARG R2_SECRET_ACCESS_KEY
+
+ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
+ENV DATABASE_URL=${DATABASE_URL}
+ENV R2_BUCKET=${R2_BUCKET}
+ENV R2_ENDPOINT=${R2_ENDPOINT}
+ENV R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
+ENV R2_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY}
+
 RUN corepack enable pnpm && pnpm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -49,8 +63,8 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+ENV PORT=3000
 # set hostname to localhost
-ENV HOSTNAME "0.0.0.0"
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]
