@@ -1,58 +1,14 @@
 import React from 'react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { Media, Page, Project } from '@/payload-types'
+import { Page, Project } from '@/payload-types'
+import { ProtectedProjectCard } from '@/components/ProtectedProjectCard'
 
 type ProjectsBlockProps = Extract<
   NonNullable<Page['layout']>[number],
   { blockType: 'projects-block' }
 > & {
   projects: Project[]
-}
-
-const ProjectCard = ({
-  title,
-  image,
-  slug,
-  className = '',
-  type,
-}: {
-  title: string
-  image: string | number | Media | null | undefined
-  slug?: string | null
-  type?: 'app' | 'website'
-  className?: string
-}) => {
-  const imageUrl = typeof image === 'object' ? image?.url : typeof image === 'string' ? image : ''
-
-  return (
-    <Link
-      href={slug ? `/projects/${slug}` : '#'}
-      className={`group relative overflow-hidden border border-zinc-800 bg-zinc-900/20 transition-all hover:border-zinc-500 ${className}`}
-    >
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 z-10" />
-      <div className="absolute inset-0 flex flex-col justify-end p-8 transition-transform duration-500 group-hover:translate-x-2 z-20">
-        <div className="mb-2">
-          {type && (
-            <span className="inline-block px-2 py-1 text-[10px] uppercase tracking-widest font-bold text-zinc-400 border border-zinc-700 bg-black/50 backdrop-blur-sm rounded-sm">
-              {type === 'app' ? 'App' : 'Website'}
-            </span>
-          )}
-        </div>
-        <h3 className="text-2xl font-black uppercase tracking-tight text-[#fdfcf0] mb-2">
-          {title}
-        </h3>
-        <div className="h-0.5 w-8 bg-[#fdfcf0] transition-all duration-500 group-hover:w-24" />
-      </div>
-      {imageUrl && (
-        <img
-          src={imageUrl}
-          alt={title}
-          className="absolute inset-0 h-full w-full object-cover opacity-60 grayscale transition-all duration-700 group-hover:scale-105 group-hover:opacity-80 group-hover:grayscale-0"
-        />
-      )}
-    </Link>
-  )
 }
 
 const PlaceholderCard = ({ className = '' }: { className?: string }) => {
@@ -108,13 +64,11 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ title, subtitle, p
 
             const project = item as Project
             return (
-              <ProjectCard
+              <ProtectedProjectCard
                 key={project.id}
-                title={project.title}
-                image={project.image}
-                slug={project.slug}
-                type={project.type}
+                project={project}
                 className={gridClass}
+                isPasswordProtected={project.isPasswordProtected || false}
               />
             )
           })}

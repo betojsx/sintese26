@@ -29,6 +29,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.18
         version: 4.1.18
+      bcryptjs:
+        specifier: ^3.0.3
+        version: 3.0.3
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -84,6 +87,9 @@ importers:
       '@testing-library/react':
         specifier: 16.3.0
         version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      '@types/bcryptjs':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@types/node':
         specifier: ^22.19.7
         version: 22.19.7
@@ -2128,6 +2134,10 @@ packages:
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
 
+  '@types/bcryptjs@3.0.0':
+    resolution: {integrity: sha512-WRZOuCuaz8UcZZE4R5HXTco2goQSI2XxjGY3hbM/xDvwmqFWd4ivooImsMx65OKM6CtNKbnZ5YL+YwAwK7c1dg==}
+    deprecated: This is a stub types definition. bcryptjs provides its own type definitions, so you do not need this installed.
+
   '@types/busboy@1.5.4':
     resolution: {integrity: sha512-kG7WrUuAKK0NoyxfQHsVE6j1m01s6kMma64E+OZenQABMQyTJop1DumUWcLwAQ2JzpefU7PDYoRDKl8uZosFjw==}
 
@@ -2542,6 +2552,10 @@ packages:
 
   baseline-browser-mapping@2.9.17:
     resolution: {integrity: sha512-agD0MgJFUP/4nvjqzIB29zRPUuCF7Ge6mEv9s8dHrtYD7QWXRcx75rOADE/d5ah1NI+0vkDl0yorDd5U852IQQ==}
+    hasBin: true
+
+  bcryptjs@3.0.3:
+    resolution: {integrity: sha512-GlF5wPWnSa/X5LKM1o0wz0suXIINz1iHRLvTS+sLyi7XPbe5ycmYI3DlZqVGZZtDgl4DmasFg7gOB3JYbphV5g==}
     hasBin: true
 
   binary-extensions@2.3.0:
@@ -8187,6 +8201,10 @@ snapshots:
     dependencies:
       '@babel/types': 7.28.6
 
+  '@types/bcryptjs@3.0.0':
+    dependencies:
+      bcryptjs: 3.0.3
+
   '@types/busboy@1.5.4':
     dependencies:
       '@types/node': 22.19.7
@@ -8626,6 +8644,8 @@ snapshots:
   base64-js@1.5.1: {}
 
   baseline-browser-mapping@2.9.17: {}
+
+  bcryptjs@3.0.3: {}
 
   binary-extensions@2.3.0: {}
 

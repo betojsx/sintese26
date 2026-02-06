@@ -173,6 +173,10 @@ export interface Project {
   id: number;
   title: string;
   slug?: string | null;
+  /**
+   * Enable password protection for this project
+   */
+  isPasswordProtected?: boolean | null;
   image: number | Media;
   company: string;
   type: 'app' | 'website';
@@ -408,6 +412,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  isPasswordProtected?: T;
   image?: T;
   company?: T;
   type?: T;
@@ -563,6 +568,12 @@ export interface SiteSetting {
     favicon?: (number | null) | Media;
     cnpj?: string | null;
   };
+  projectProtection?: {
+    /**
+     * Set a password to protect projects. Leave empty to disable protection.
+     */
+    password?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -578,6 +589,11 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         logo?: T;
         favicon?: T;
         cnpj?: T;
+      };
+  projectProtection?:
+    | T
+    | {
+        password?: T;
       };
   updatedAt?: T;
   createdAt?: T;

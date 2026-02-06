@@ -5,6 +5,7 @@ import { ContactSection } from '@/components/Contact'
 import { Footer } from '@/components/Footer'
 import { Project } from '@/payload-types'
 import { Nav } from '@/components/Nav'
+import { ProtectedProjectCard } from '@/components/ProtectedProjectCard'
 
 const HeroAscii = () => (
   <pre className="text-[0.6rem] leading-[0.8] font-mono text-zinc-600 opacity-50 select-none hidden lg:block">
@@ -87,44 +88,6 @@ const FeatureCard = ({ icon: Icon, title, description, ascii: Ascii }: FeatureCa
     </div>
   </div>
 )
-
-const ProjectCard = ({
-  title,
-  image,
-  slug,
-  className = '',
-}: {
-  title: string
-  image: any
-  slug?: string | null
-  className?: string
-}) => {
-  const imageUrl = typeof image === 'object' ? image?.url : typeof image === 'string' ? image : ''
-
-  return (
-    <Link
-      href={slug ? `/projects/${slug}` : '#'}
-      className={`group relative overflow-hidden border border-zinc-800 transition-all hover:border-zinc-500 ${className}`}
-    >
-      {imageUrl ? (
-        <img
-          src={imageUrl}
-          alt={title}
-          className="h-full w-full object-cover opacity-40 grayscale transition-all duration-700 group-hover:scale-105 group-hover:opacity-80 group-hover:grayscale-0"
-        />
-      ) : (
-        <div className="h-full w-full bg-zinc-900 flex items-center justify-center">
-          <span className="text-zinc-700 font-mono text-xs">[NO IMAGE]</span>
-        </div>
-      )}
-      <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent opacity-80" />
-      <div className="absolute inset-0 flex flex-col justify-end p-6 transition-transform duration-500 group-hover:translate-x-2">
-        <h3 className="text-xl font-bold uppercase tracking-tight text-[#fdfcf0]">{title}</h3>
-        <div className="mt-2 h-0.5 w-0 bg-[#fdfcf0] transition-all duration-500 group-hover:w-16" />
-      </div>
-    </Link>
-  )
-}
 
 export const DefaultHome = ({ projects }: { projects: Project[] }) => {
   const hasProjects = projects.length > 0
@@ -248,12 +211,11 @@ export const DefaultHome = ({ projects }: { projects: Project[] }) => {
               const gridClass = 'md:col-span-1 md:row-span-1'
 
               return (
-                <ProjectCard
+                <ProtectedProjectCard
                   key={project.id}
-                  title={project.title}
-                  image={project.image}
-                  slug={project.slug}
+                  project={project}
                   className={gridClass}
+                  isPasswordProtected={project.isPasswordProtected || false}
                 />
               )
             })

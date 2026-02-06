@@ -25,6 +25,15 @@ export const Projects: CollectionConfig = {
       },
     },
     {
+      name: 'isPasswordProtected',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Enable password protection for this project',
+      },
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
