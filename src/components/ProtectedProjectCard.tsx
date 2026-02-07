@@ -52,7 +52,9 @@ export const ProtectedProjectCard: React.FC<ProtectedProjectCardProps> = ({
       <Link
         href={project.slug ? `/projects/${project.slug}` : '#'}
         onClick={handleCardClick}
-        className={`group relative overflow-hidden border border-zinc-800 transition-all hover:border-zinc-500 ${className}`}
+        className={`group relative overflow-hidden border border-zinc-800 transition-all hover:border-zinc-500 ${
+          isPasswordProtected && !isUnlocked ? 'cursor-default' : 'cursor-pointer'
+        } ${className}`}
       >
         {/* Image */}
         {imageUrl ? (
