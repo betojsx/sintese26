@@ -86,14 +86,23 @@ export const Portfolio: GlobalConfig = {
           localized: true,
         },
         {
-          name: 'bio',
+          name: 'subtitle',
           type: 'textarea',
+          label: {
+            en: 'Subtitle',
+            pt: 'Subtítulo',
+          },
+          defaultValue:
+            'Desenvolvedor especialista em frontend web e mobile com 8+ anos de experiência',
+          localized: true,
+        },
+        {
+          name: 'bio',
+          type: 'richText',
           label: {
             en: 'Bio',
             pt: 'Biografia',
           },
-          defaultValue:
-            'Building digital bridges since 2018. With over 8 years of experience, I specialize in creating fluid, high-performance applications across the entire frontend spectrum. From hybrid solutions with Ionic to native experiences using React Native, I craft pixel-perfect interfaces that scale. My mission is to translate complex requirements into seamless reliable user experiences.',
           localized: true,
         },
         {

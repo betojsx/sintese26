@@ -594,7 +594,22 @@ export interface Portfolio {
     badgeText?: string | null;
     firstName?: string | null;
     lastName?: string | null;
-    bio?: string | null;
+    subtitle?: string | null;
+    bio?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
     ctaLabel?: string | null;
     profileImage?: (number | null) | Media;
     socialLinks?: {
@@ -665,6 +680,7 @@ export interface PortfolioSelect<T extends boolean = true> {
         badgeText?: T;
         firstName?: T;
         lastName?: T;
+        subtitle?: T;
         bio?: T;
         ctaLabel?: T;
         profileImage?: T;

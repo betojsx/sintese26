@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react'
-import BlurText from '@/components/BlurText'
+import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Portfolio, Media } from '@/payload-types'
 
 interface PortfolioHeroProps {
@@ -22,26 +22,23 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
             <div className="space-y-6">
               <div className="inline-block px-3 py-1 border border-primary/20 rounded-full bg-primary/5 backdrop-blur-sm">
                 <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                  {hero?.badgeText || 'Senior Frontend Developer'}
+                  {hero?.badgeText}
                 </span>
               </div>
 
               <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] text-foreground">
-                {hero?.firstName || 'Roberto'} <br />
-                <span className="text-muted-foreground">{hero?.lastName || 'Silva'}</span>
+                {hero?.firstName} <br />
+                <span className="text-muted-foreground">{hero?.lastName}</span>
               </h1>
 
-              <div className="max-w-xl text-lg md:text-xl text-muted-foreground leading-relaxed font-light min-h-[220px]">
-                <BlurText
-                  text={
-                    hero?.bio ||
-                    'Building digital bridges since 2018. With over 8 years of experience, I specialize in creating fluid, high-performance applications across the entire frontend spectrum. From hybrid solutions with Ionic to native experiences using React Native, I craft pixel-perfect interfaces that scale. My mission is to translate complex requirements into seamless reliable user experiences.'
-                  }
-                  delay={30}
-                  animateBy="words"
-                  direction="bottom"
-                  className="font-sans text-lg md:text-xl text-muted-foreground leading-relaxed font-light"
-                />
+              {hero?.subtitle && (
+                <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl leading-tight">
+                  {hero.subtitle}
+                </p>
+              )}
+
+              <div className="max-w-xl text-lg md:text-xl text-muted-foreground leading-relaxed font-light min-h-[220px] [&>p]:mb-4 [&>p:last-child]:mb-0">
+                {hero?.bio && typeof hero.bio === 'object' && <RichText data={hero.bio} />}
               </div>
 
               <div className="flex flex-wrap gap-4 pt-4">
@@ -49,7 +46,7 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
                   href="#contact"
                   className="bg-primary text-primary-foreground! px-8 py-4 font-bold uppercase text-sm flex items-center gap-3 hover:translate-x-1 hover:-translate-y-1 transition-transform border-r-4 border-b-4 border-white/20"
                 >
-                  {hero?.ctaLabel || 'Contact Me'} <ArrowRight size={18} />
+                  {hero?.ctaLabel} <ArrowRight size={18} />
                 </Link>
 
                 <div className="flex items-center gap-4 px-6 border-l border-border/50">
@@ -91,8 +88,8 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
 
               <div className="relative h-full w-full rounded-2xl overflow-hidden shadow-2xl z-10 bg-zinc-900/50 grayscale hover:grayscale-0 transition-all duration-700">
                 <Image
-                  src={profileImage?.url || '/images/roberto.png'}
-                  alt={`${hero?.firstName || 'Roberto'} ${hero?.lastName || 'Silva'}`}
+                  src={profileImage?.url}
+                  alt={`${hero?.firstName} ${hero?.lastName}`}
                   fill
                   className="object-cover"
                   priority
