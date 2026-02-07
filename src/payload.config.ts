@@ -15,6 +15,7 @@ import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
 import { Pages } from './collections/Pages'
 import { SiteSettings } from './globals/SiteSettings'
+import { Portfolio } from './globals/Portfolio'
 import { VideoBlock } from './blocks/Video'
 
 const filename = fileURLToPath(import.meta.url)
@@ -28,7 +29,12 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Projects, Pages],
-  globals: [SiteSettings],
+  globals: [SiteSettings, Portfolio],
+  localization: {
+    locales: ['en', 'pt-BR'],
+    defaultLocale: 'en',
+    fallback: true,
+  },
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
@@ -44,8 +50,8 @@ export default buildConfig({
               json: 'JSON',
             },
             typescript: {
-              enableSemanticValidation: false
-            }
+              enableSemanticValidation: false,
+            },
           }),
           VideoBlock,
         ],

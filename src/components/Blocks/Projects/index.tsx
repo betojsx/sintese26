@@ -1,21 +1,19 @@
 import React from 'react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { Page, Project } from '@/payload-types'
+import type { Project, Portfolio } from '@/payload-types'
 import { ProtectedProjectCard } from '@/components/ProtectedProjectCard'
 
-type ProjectsBlockProps = Extract<
-  NonNullable<Page['layout']>[number],
-  { blockType: 'projects-block' }
-> & {
+interface ProjectsBlockProps {
   projects: Project[]
+  projectsSection?: Portfolio['projects']
 }
 
 const PlaceholderCard = ({ className = '' }: { className?: string }) => {
   return <div className={`border border-zinc-800/30 bg-zinc-900/10 ${className}`} />
 }
 
-export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ title, subtitle, projects = [] }) => {
+export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ projects = [], projectsSection }) => {
   // Combine real projects with placeholders
   const displayItems = [...projects]
 
@@ -43,14 +41,16 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ title, subtitle, p
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div className="max-w-2xl">
             <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4 text-[#fdfcf0]">
-              {title || 'Nossos Projetos'}
+              {projectsSection?.title || 'Selected Works'}
             </h2>
             <p className="text-zinc-500 uppercase text-xs tracking-[0.2em] font-medium">
-              {subtitle || 'Soluções reais para problemas complexos • 2024-2025'}
+              {projectsSection?.subtitle || 'A Showcase of Technical Excellence • 2024-2026'}
             </p>
           </div>
           <div className="text-right hidden md:block">
-            <span className="text-zinc-800 text-8xl font-black opacity-50">02</span>
+            <span className="text-zinc-800 text-8xl font-black opacity-50">
+              {projectsSection?.sectionNumber || '02'}
+            </span>
           </div>
         </div>
 
@@ -79,7 +79,7 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ title, subtitle, p
             href="/projects"
             className="border border-zinc-800 px-12 py-4 font-bold uppercase text-xs tracking-widest text-zinc-400 hover:text-[#fdfcf0] hover:bg-zinc-900 transition-all flex items-center gap-3 group"
           >
-            Ver todos os projetos{' '}
+            {projectsSection?.viewAllLabel || 'View all projects'}{' '}
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

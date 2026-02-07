@@ -90,14 +90,16 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'pt-BR') | ('en' | 'pt-BR')[];
   globals: {
     'site-settings': SiteSetting;
+    portfolio: Portfolio;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    portfolio: PortfolioSelect<false> | PortfolioSelect<true>;
   };
-  locale: null;
+  locale: 'en' | 'pt-BR';
   user: User & {
     collection: 'users';
   };
@@ -579,6 +581,52 @@ export interface SiteSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "portfolio".
+ */
+export interface Portfolio {
+  id: number;
+  navigation?: {
+    projectsLabel?: string | null;
+    experienceLabel?: string | null;
+    contactLabel?: string | null;
+  };
+  hero?: {
+    badgeText?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    bio?: string | null;
+    ctaLabel?: string | null;
+    profileImage?: (number | null) | Media;
+    socialLinks?: {
+      github?: string | null;
+      linkedin?: string | null;
+      email?: string | null;
+    };
+  };
+  projects?: {
+    title?: string | null;
+    subtitle?: string | null;
+    viewAllLabel?: string | null;
+    sectionNumber?: string | null;
+  };
+  footer?: {
+    titleLine1?: string | null;
+    titleLine2?: string | null;
+    description?: string | null;
+    contactEmail?: string | null;
+    socialLinks?: {
+      github?: string | null;
+      linkedin?: string | null;
+      twitter?: string | null;
+      email?: string | null;
+    };
+    copyrightText?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -594,6 +642,64 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | T
     | {
         password?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "portfolio_select".
+ */
+export interface PortfolioSelect<T extends boolean = true> {
+  navigation?:
+    | T
+    | {
+        projectsLabel?: T;
+        experienceLabel?: T;
+        contactLabel?: T;
+      };
+  hero?:
+    | T
+    | {
+        badgeText?: T;
+        firstName?: T;
+        lastName?: T;
+        bio?: T;
+        ctaLabel?: T;
+        profileImage?: T;
+        socialLinks?:
+          | T
+          | {
+              github?: T;
+              linkedin?: T;
+              email?: T;
+            };
+      };
+  projects?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        viewAllLabel?: T;
+        sectionNumber?: T;
+      };
+  footer?:
+    | T
+    | {
+        titleLine1?: T;
+        titleLine2?: T;
+        description?: T;
+        contactEmail?: T;
+        socialLinks?:
+          | T
+          | {
+              github?: T;
+              linkedin?: T;
+              twitter?: T;
+              email?: T;
+            };
+        copyrightText?: T;
       };
   updatedAt?: T;
   createdAt?: T;

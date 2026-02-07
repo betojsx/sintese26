@@ -6,7 +6,13 @@ import { PortfolioFooter } from '@/components/Blocks/PortfolioFooter'
 import { PortfolioHero } from '@/components/Blocks/PortfolioHero'
 import { ProjectsBlock } from '@/components/Blocks/Projects'
 
-export default async function PortfolioPage() {
+interface PortfolioPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function PortfolioPage({ searchParams }: PortfolioPageProps) {
+  const params = await searchParams
+  const locale = (params?.locale as string) || 'en'
   const payload = await getPayload({ config })
 
   // Fetch Projects
@@ -16,25 +22,23 @@ export default async function PortfolioPage() {
     limit: 6,
   })
 
-  // Fetch Site Settings for Footer
+  // Fetch Site Settings for Footer CNPJ
   const siteSettings = await payload.findGlobal({
     slug: 'site-settings',
   })
 
-  // Projects Content
-  const projectsProps = {
-    blockType: 'projects-block' as const,
-    title: 'Selected Works',
-    subtitle: 'A Showcase of Technical Excellence • 2024-2026',
-    projects: projects,
-  }
+  // Fetch Portfolio content with localization
+  const portfolio = await payload.findGlobal({
+    slug: 'portfolio',
+    locale: locale as 'en' | 'pt-BR',
+  })
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-      <PortfolioNav />
-      <PortfolioHero />
-      <ProjectsBlock {...projectsProps} />
-      <PortfolioFooter cnpj={siteSettings?.general?.cnpj} />
+      <PortfolioNav portfolio={portfolio} />
+      <PortfolioHero hero={portfolio?.hero} />
+      <ProjectsBlock projects={projects} projectsSection={portfolio?.projects} />
+      <PortfolioFooter cnpj={siteSettings?.general?.cnpj} footer={portfolio?.footer} />
     </div>
   )
 }
