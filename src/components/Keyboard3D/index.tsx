@@ -1,125 +1,194 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import styles from './styles.module.css'
+import React, { useState, useEffect, useRef } from 'react'
+import styles from './styles.module.scss'
+
+const useSetState = <T extends unknown>(initialState: T[] = []) => {
+  const [state, setState] = useState(new Set(initialState))
+  const add = (item: T) => setState((prev) => new Set(prev).add(item))
+  const remove = (item: T) =>
+    setState((prev) => {
+      const next = new Set(prev)
+      next.delete(item)
+      return next
+    })
+  return { set: state, add, remove, has: (item: T) => state.has(item) }
+}
+
+const useSound = (url: string) => {
+  const sound = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    sound.current = new Audio(url)
+  }, [url])
+
+  return {
+    play: () => {
+      if (sound.current) {
+        sound.current.currentTime = 0
+        sound.current.play().catch(() => {})
+      }
+    },
+    stop: () => {
+      if (sound.current) {
+        sound.current.pause()
+        sound.current.currentTime = 0
+      }
+    },
+  }
+}
+
+interface KeyProps {
+  char: string
+  span?: boolean
+  active: boolean
+  onClick?: () => void
+}
+
+const Key: React.FC<KeyProps> = ({ char, span, active, onClick }) => {
+  const classNames = [styles.key, span && styles.span, active && styles.active]
+    .filter(Boolean)
+    .join(' ')
+
+  return (
+    <div className={classNames} onMouseDown={onClick}>
+      <div className={styles.side} />
+      <div className={styles.top} />
+      <div className={styles.char}>{char}</div>
+    </div>
+  )
+}
+
+const Column: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className={styles.column}>{children}</div>
+)
+
+const Row: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className={styles.row}>{children}</div>
+)
 
 export const Keyboard3D: React.FC = () => {
-  const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set())
+  // Mechanical click sound
+  const { play, stop } = useSound('https://cdn.yoavik.com/codepen/mechanical-keyboard/keytype.mp3')
+
+  const { add, remove, has } = useSetState<string>([])
+  const [isVisible, setIsVisible] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Keep track of visibility in a ref for event listeners
+  const isVisibleRef = useRef(isVisible)
+  useEffect(() => {
+    isVisibleRef.current = isVisible
+  }, [isVisible])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      { threshold: 0.1 },
+    )
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  const validKeys = [
+    'q',
+    'w',
+    'e',
+    'r',
+    't',
+    'y',
+    'u',
+    'i',
+    'o',
+    'p',
+    'a',
+    's',
+    'd',
+    'f',
+    'g',
+    'h',
+    'j',
+    'k',
+    'l',
+    'z',
+    'x',
+    'c',
+    'v',
+    'b',
+    'n',
+    'm',
+    'enter',
+  ]
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const key = e.key.toLowerCase()
-      // Map space to 'enter' for visual feedback
-      const targetKey = key === ' ' ? 'enter' : key
+      // Only trigger if visible and no modifier keys (cmd, ctrl, alt) are pressed
+      if (!isVisibleRef.current || e.metaKey || e.ctrlKey || e.altKey) return
 
-      if (['1', '2', 'enter'].includes(targetKey)) {
-        setPressedKeys((prev) => {
-          const newSet = new Set(prev)
-          newSet.add(targetKey)
-          return newSet
-        })
+      const key = e.key.toLowerCase()
+      if (validKeys.includes(key)) {
+        add(key)
+        stop()
+        play()
       }
     }
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      const key = e.key.toLowerCase()
-      const targetKey = key === ' ' ? 'enter' : key
+      // Only trigger if visible
+      if (!isVisibleRef.current) return
 
-      if (['1', '2', 'enter'].includes(targetKey)) {
-        setPressedKeys((prev) => {
-          const newSet = new Set(prev)
-          newSet.delete(targetKey)
-          return newSet
-        })
+      const key = e.key.toLowerCase()
+      if (validKeys.includes(key)) {
+        remove(key)
       }
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-    window.addEventListener('keyup', handleKeyUp)
+    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('keyup', handleKeyUp)
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-      window.removeEventListener('keyup', handleKeyUp)
+      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('keyup', handleKeyUp)
     }
-  }, [])
+  }, [add, remove, play, stop])
 
-  const preventFocus = (e: React.MouseEvent) => {
-    e.preventDefault()
-  }
+  const renderKeys = (chars: string[], spans: boolean[] = []) =>
+    chars.map((char, i) => (
+      <Key
+        key={char}
+        char={char}
+        span={spans[i] || false}
+        active={has(char.toLowerCase())}
+        onClick={() => {
+          play()
+          add(char.toLowerCase())
+          setTimeout(() => remove(char.toLowerCase()), 200)
+        }}
+      />
+    ))
 
   return (
-    <div className={styles.keypad}>
-      <div className={styles.base}>
-        <img src="/assets/keyboard/keypad-base.webp" alt="" />
+    <div ref={containerRef} className={styles.wrapper}>
+      <div className={styles.keyboard}>
+        <Column>
+          <Row>{renderKeys(['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'])}</Row>
+          <Row>{renderKeys(['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'])}</Row>
+          <Row>
+            {renderKeys(
+              ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'Enter'],
+              [false, false, false, false, false, false, false, true],
+            )}
+          </Row>
+        </Column>
+        <div className={styles.shade} />
+        <div className={styles.cover} />
       </div>
-
-      {/* Key 1 - Red */}
-      <button
-        id="one"
-        className={`${styles.key} ${styles.single} ${styles.left}`}
-        data-pressed={pressedKeys.has('1')}
-        style={
-          {
-            '--hue': '0',
-            '--saturate': '1',
-          } as React.CSSProperties
-        }
-        onMouseDown={preventFocus}
-        onClick={() => console.log('1 pressed')}
-      >
-        <span className={styles.keyMask}>
-          <span className={styles.keyContent}>
-            <span className={styles.keyText}>1</span>
-            <img src="/assets/keyboard/keypad-single.webp" alt="" />
-          </span>
-        </span>
-      </button>
-
-      {/* Key 2 - Grey */}
-      <button
-        id="two"
-        className={`${styles.key} ${styles.single}`}
-        data-pressed={pressedKeys.has('2')}
-        style={
-          {
-            '--hue': '0',
-            '--saturate': '0',
-            '--brightness': '1.2',
-          } as React.CSSProperties
-        }
-        onMouseDown={preventFocus}
-        onClick={() => console.log('2 pressed')}
-      >
-        <span className={styles.keyMask}>
-          <span className={styles.keyContent}>
-            <span className={styles.keyText}>2</span>
-            <img src="/assets/keyboard/keypad-single.webp" alt="" />
-          </span>
-        </span>
-      </button>
-
-      {/* Key 3 - Enviar (Double) */}
-      <button
-        id="three"
-        className={`${styles.key} ${styles.double}`}
-        data-pressed={pressedKeys.has('enter')}
-        style={
-          {
-            '--hue': '210',
-            '--saturate': '0',
-            '--brightness': '0.3', // Dark grey/black
-          } as React.CSSProperties
-        }
-        onMouseDown={preventFocus}
-        onClick={() => console.log('Enviar pressed')}
-      >
-        <span className={styles.keyMask}>
-          <span className={styles.keyContent}>
-            <span className={styles.keyText}>enviar</span>
-            <img src="/assets/keyboard/keypad-double.webp" alt="" />
-          </span>
-        </span>
-      </button>
     </div>
   )
 }

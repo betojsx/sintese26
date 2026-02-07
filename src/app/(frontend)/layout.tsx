@@ -1,13 +1,20 @@
 import React from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { Mona_Sans } from 'next/font/google'
+import { Mona_Sans, BioRhyme } from 'next/font/google'
 import localFont from 'next/font/local'
 import './styles.css'
 
 const monaSans = Mona_Sans({
   subsets: ['latin'],
   variable: '--font-mona-sans',
+  display: 'swap',
+})
+
+const bioRhyme = BioRhyme({
+  subsets: ['latin'],
+  variable: '--font-biorhyme',
+  weight: ['200', '300', '400', '700', '800'],
   display: 'swap',
 })
 
@@ -40,7 +47,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
   return (
-    <html lang="pt-BR" className={`${monaSans.variable} ${monaspaceArgon.variable}`}>
+    <html
+      lang="pt-BR"
+      className={`${monaSans.variable} ${monaspaceArgon.variable} ${bioRhyme.variable}`}
+    >
       <body>
         <main>{children}</main>
       </body>
