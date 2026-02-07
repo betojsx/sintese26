@@ -24,8 +24,8 @@ export const PortfolioNav = ({ portfolio }: PortfolioNavProps) => {
   }
 
   return (
-    <nav className="py-8 px-6 md:px-12 border-b border-border sticky top-0 bg-background/80 backdrop-blur-md z-50">
-      <div className="container mx-auto flex items-center justify-between">
+    <nav className="sticky top-0 z-50 py-4 px-6 md:px-12">
+      <div className="container mx-auto w-[90%] h-full rounded-[50px] py-4 px-6 flex items-center justify-between bg-white/5 backdrop-blur-[10px] border border-white/10">
         <div className="flex items-center gap-2">
           <Link href="/portfolio" className="text-foreground font-medium tracking-tight text-base">
             <p className="m-0!">roberto@sintese.dev</p>

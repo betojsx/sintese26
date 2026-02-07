@@ -37,7 +37,12 @@ export default async function PortfolioPage({ searchParams }: PortfolioPageProps
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
       <PortfolioNav portfolio={portfolio} />
       <PortfolioHero hero={portfolio?.hero} />
-      <ProjectsBlock projects={projects} projectsSection={portfolio?.projects} />
+      <ProjectsBlock
+        projects={projects}
+        projectsSection={portfolio?.projects}
+        basePath="/portfolio/projects"
+        viewAllLink="/portfolio#work"
+      />
       <PortfolioFooter cnpj={siteSettings?.general?.cnpj} footer={portfolio?.footer} />
     </div>
   )

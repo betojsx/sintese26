@@ -12,12 +12,16 @@ interface ProtectedProjectPageProps {
   project: Project
   nav: ReactNode
   footer: ReactNode
+  backLink?: string
+  backLabel?: string
 }
 
 export const ProtectedProjectPage: React.FC<ProtectedProjectPageProps> = ({
   project,
   nav,
   footer,
+  backLink = '/projects',
+  backLabel = 'Voltar para Projetos',
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUnlocked, setIsUnlocked] = useState(false)
@@ -74,10 +78,10 @@ export const ProtectedProjectPage: React.FC<ProtectedProjectPageProps> = ({
             Unlock Project
           </button>
           <Link
-            href="/projects"
+            href={backLink}
             className="mt-8 text-zinc-500 hover:text-[#fdfcf0] transition-colors uppercase text-xs tracking-widest flex items-center gap-2"
           >
-            <ArrowLeft size={14} /> Back to Projects
+            <ArrowLeft size={14} /> {backLabel}
           </Link>
         </main>
 
@@ -118,10 +122,10 @@ export const ProtectedProjectPage: React.FC<ProtectedProjectPageProps> = ({
 
           <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 max-w-7xl mx-auto w-full">
             <Link
-              href="/projects"
+              href={backLink}
               className="inline-flex items-center gap-2 text-zinc-400 hover:text-[#fdfcf0] transition-colors mb-6 uppercase text-xs tracking-widest w-fit"
             >
-              <ArrowLeft size={14} /> Voltar para Projetos
+              <ArrowLeft size={14} /> {backLabel}
             </Link>
 
             <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-4 text-[#fdfcf0]">

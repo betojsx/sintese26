@@ -10,12 +10,14 @@ interface ProtectedProjectCardProps {
   project: Project
   className?: string
   isPasswordProtected?: boolean
+  basePath?: string
 }
 
 export const ProtectedProjectCard: React.FC<ProtectedProjectCardProps> = ({
   project,
   className = '',
   isPasswordProtected = false,
+  basePath = '/projects',
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUnlocked, setIsUnlocked] = useState(false)
@@ -36,7 +38,7 @@ export const ProtectedProjectCard: React.FC<ProtectedProjectCardProps> = ({
     setIsUnlocked(true)
     // Navigate to the project after successful unlock
     if (project.slug) {
-      window.location.href = `/projects/${project.slug}`
+      window.location.href = `${basePath}/${project.slug}`
     }
   }
 
@@ -50,7 +52,7 @@ export const ProtectedProjectCard: React.FC<ProtectedProjectCardProps> = ({
   return (
     <>
       <Link
-        href={project.slug ? `/projects/${project.slug}` : '#'}
+        href={project.slug ? `${basePath}/${project.slug}` : '#'}
         onClick={handleCardClick}
         className={`group relative overflow-hidden border border-zinc-800 transition-all hover:border-zinc-500 ${
           isPasswordProtected && !isUnlocked ? 'cursor-default' : 'cursor-pointer'

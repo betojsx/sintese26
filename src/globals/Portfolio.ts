@@ -1,3 +1,5 @@
+import { SlateToLexicalFeature } from '@payloadcms/richtext-lexical/migrate'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { GlobalConfig } from 'payload'
 
 export const Portfolio: GlobalConfig = {
@@ -104,6 +106,12 @@ export const Portfolio: GlobalConfig = {
             pt: 'Biografia',
           },
           localized: true,
+          editor: lexicalEditor({
+            features: ({ defaultFeatures }) => [
+              ...defaultFeatures,
+              SlateToLexicalFeature ({}),
+            ],
+          }),
         },
         {
           name: 'ctaLabel',

@@ -7,13 +7,20 @@ import { ProtectedProjectCard } from '@/components/ProtectedProjectCard'
 interface ProjectsBlockProps {
   projects: Project[]
   projectsSection?: Portfolio['projects']
+  basePath?: string
+  viewAllLink?: string
 }
 
 const PlaceholderCard = ({ className = '' }: { className?: string }) => {
   return <div className={`border border-zinc-800/30 bg-zinc-900/10 ${className}`} />
 }
 
-export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ projects = [], projectsSection }) => {
+export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({
+  projects = [],
+  projectsSection,
+  basePath = '/projects',
+  viewAllLink = '/projects',
+}) => {
   // Combine real projects with placeholders
   const displayItems = [...projects]
 
@@ -69,6 +76,7 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ projects = [], pro
                 project={project}
                 className={gridClass}
                 isPasswordProtected={project.isPasswordProtected || false}
+                basePath={basePath}
               />
             )
           })}
@@ -76,7 +84,7 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({ projects = [], pro
 
         <div className="flex justify-center mt-12">
           <Link
-            href="/projects"
+            href={viewAllLink}
             className="border border-zinc-800 px-12 py-4 font-bold uppercase text-xs tracking-widest text-zinc-400 hover:text-[#fdfcf0] hover:bg-zinc-900 transition-all flex items-center gap-3 group"
           >
             {projectsSection?.viewAllLabel || 'View all projects'}{' '}

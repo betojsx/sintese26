@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Portfolio, Media } from '@/payload-types'
+import DarkVeil from '@/components/DarkVeil'
 
 interface PortfolioHeroProps {
   hero?: Portfolio['hero']
@@ -14,8 +15,8 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
   const socialLinks = hero?.socialLinks
 
   return (
-    <section className="relative w-full min-h-[80vh] flex items-center pt-12 lg:pt-24 pb-12 lg:pb-24 overflow-hidden border-b border-border/40">
-      <div className="container mx-auto px-6 md:px-12">
+    <section className="w-full min-h-[80vh] flex items-center pt-12 lg:pt-24 pb-12 lg:pb-24 overflow-hidden border-b border-border/40">
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 lg:gap-12 items-center">
           {/* Text Content */}
           <div className="order-2 lg:order-1 flex flex-col justify-center">
@@ -26,13 +27,13 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] text-foreground">
+              <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] text-foreground mb-2">
                 {hero?.firstName} <br />
                 <span className="text-muted-foreground">{hero?.lastName}</span>
               </h1>
 
               {hero?.subtitle && (
-                <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl leading-tight">
+                <p className="text-lg text-muted-foreground font-light max-w-2xl leading-tight mb-4!">
                   {hero.subtitle}
                 </p>
               )}
@@ -81,7 +82,7 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
 
           {/* Image Content */}
           <div className="order-1 lg:order-2 relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[500px] aspect-square lg:aspect-[4/5]">
+            <div className="relative w-full max-w-[640px] aspect-square lg:aspect-[4/5]">
               {/* Decorative elements */}
               <div className="absolute top-10 right-10 w-full h-full border-2 border-primary/20 rounded-2xl z-0 transform translate-x-6 lg:translate-x-4 lg:translate-y-4"></div>
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-2xl"></div>
@@ -101,6 +102,17 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="absolute inset-0 z-0">
+        <DarkVeil
+          hueShift={0}
+          noiseIntensity={0.06}
+          scanlineIntensity={0}
+          speed={0.5}
+          scanlineFrequency={0}
+          warpAmount={3.3}
+        />
       </div>
     </section>
   )
