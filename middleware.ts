@@ -9,24 +9,38 @@ export function middleware(request: NextRequest) {
   const isMainDomain = hostname === 'sintese.dev' || hostname === 'www.sintese.dev'
   const isPortfolioPath = url.pathname === '/portfolio' || url.pathname.startsWith('/portfolio/')
 
+  console.log('Middleware Debug:', {
+    hostname,
+    pathname: url.pathname,
+    isPortfolioDomain,
+    isMainDomain,
+    isPortfolioPath,
+  })
+
+  let response: NextResponse
+
   // Portfolio subdomain: serve portfolio at root
   if (isPortfolioDomain && url.pathname === '/') {
+    console.log('Rewriting root to /portfolio for subdomain')
     url.pathname = '/portfolio'
-    return NextResponse.rewrite(url)
+    response = NextResponse.rewrite(url)
   }
-
   // Portfolio subdomain: redirect /portfolio to /
-  if (isPortfolioDomain && isPortfolioPath) {
+  else if (isPortfolioDomain && isPortfolioPath) {
+    console.log('Redirecting /portfolio path to root for subdomain')
     url.pathname = '/'
-    return NextResponse.redirect(url, 308) // 308 Permanent Redirect
+    response = NextResponse.redirect(url, 308) // 308 Permanent Redirect
   }
-
   // Main domain: block /portfolio route completely
-  if (isMainDomain && isPortfolioPath) {
-    return new NextResponse('Not Found', { status: 404 })
+  else if (isMainDomain && isPortfolioPath) {
+    console.log('Blocking /portfolio path on main domain')
+    response = new NextResponse('Not Found', { status: 404 })
+  } else {
+    response = NextResponse.next()
   }
 
-  return NextResponse.next()
+  response.headers.set('x-debug-hostname', hostname)
+  return response
 }
 
 export const config = {
