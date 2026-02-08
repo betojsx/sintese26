@@ -1,45 +1,38 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+function getHostname(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-host')
+  const host = request.headers.get('host') || ''
+  const raw = (forwarded || host).split(',')[0].trim()
+  const withoutPort = raw.includes(':') ? raw.slice(0, raw.indexOf(':')) : raw
+  return withoutPort.toLowerCase()
+}
+
 export function middleware(request: NextRequest) {
-  const hostname = request.headers.get('host') || ''
+  const hostname = getHostname(request)
   const url = request.nextUrl.clone()
 
   const isPortfolioDomain = hostname === 'roberto.sintese.dev'
   const isMainDomain = hostname === 'sintese.dev' || hostname === 'www.sintese.dev'
   const isPortfolioPath = url.pathname === '/portfolio' || url.pathname.startsWith('/portfolio/')
 
-  console.log('Middleware Debug:', {
-    hostname,
-    pathname: url.pathname,
-    isPortfolioDomain,
-    isMainDomain,
-    isPortfolioPath,
-  })
-
   let response: NextResponse
 
-  // Portfolio subdomain: serve portfolio at root
   if (isPortfolioDomain && url.pathname === '/') {
-    console.log('Rewriting root to /portfolio for subdomain')
     url.pathname = '/portfolio'
     response = NextResponse.rewrite(url)
-  }
-  // Portfolio subdomain: redirect /portfolio to /
-  else if (isPortfolioDomain && isPortfolioPath) {
-    console.log('Redirecting /portfolio path to root for subdomain')
+  } else if (isPortfolioDomain && isPortfolioPath) {
     url.pathname = '/'
-    response = NextResponse.redirect(url, 308) // 308 Permanent Redirect
-  }
-  // Main domain: block /portfolio route completely
-  else if (isMainDomain && isPortfolioPath) {
-    console.log('Blocking /portfolio path on main domain')
+    response = NextResponse.redirect(url, 308)
+  } else if (isMainDomain && isPortfolioPath) {
     response = new NextResponse('Not Found', { status: 404 })
   } else {
     response = NextResponse.next()
   }
 
-  response.headers.set('x-debug-hostname', hostname)
+  response.headers.set('x-middleware-host', hostname)
+  response.headers.set('x-middleware-match', isMainDomain ? 'main' : isPortfolioDomain ? 'portfolio' : 'other')
   return response
 }
 
