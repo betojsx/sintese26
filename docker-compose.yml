@@ -1,0 +1,16 @@
+services:
+  web:
+    image: ghcr.io/betojsx/sintese26:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - PAYLOAD_SECRET=${PAYLOAD_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+      - R2_BUCKET=${R2_BUCKET}
+      - R2_ENDPOINT=${R2_ENDPOINT}
+      - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
+      - R2_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY}
+    restart: unless-stopped
