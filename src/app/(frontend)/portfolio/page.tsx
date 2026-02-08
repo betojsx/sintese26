@@ -12,7 +12,7 @@ interface PortfolioPageProps {
 
 export default async function PortfolioPage({ searchParams }: PortfolioPageProps) {
   const params = await searchParams
-  const locale = (params?.locale as string) || 'en'
+  const locale = (params?.locale as string) || 'pt-BR'
   const payload = await getPayload({ config })
 
   // Fetch Projects

@@ -82,7 +82,7 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
 
           {/* Image Content */}
           <div className="order-1 lg:order-2 relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[640px] aspect-square lg:aspect-[4/5]">
+            <div className="relative w-full max-w-[560px] xl:max-w-[640px] aspect-square lg:aspect-[4/5]">
               {/* Decorative elements */}
               <div className="absolute top-10 right-10 w-full h-full border-2 border-primary/20 rounded-2xl z-0 transform translate-x-6 lg:translate-x-4 lg:translate-y-4"></div>
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-2xl"></div>
@@ -104,7 +104,7 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
         </div>
       </div>
 
-      <div className="absolute inset-0 z-0">
+      <div className="absolute h-200px lg:h-600px -top-[100px] z-0">
         <DarkVeil
           hueShift={0}
           noiseIntensity={0.06}

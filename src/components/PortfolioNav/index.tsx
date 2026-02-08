@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { Globe } from 'lucide-react'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import type { Portfolio } from '@/payload-types'
 
 interface PortfolioNavProps {
@@ -12,15 +12,16 @@ interface PortfolioNavProps {
 
 export const PortfolioNav = ({ portfolio }: PortfolioNavProps) => {
   const pathname = usePathname()
+  const router = useRouter()
   const searchParams = useSearchParams()
-  const currentLocale = searchParams.get('locale') || 'en'
+  const currentLocale = searchParams.get('locale') || 'pt-BR'
   const nav = portfolio?.navigation
 
   const toggleLocale = () => {
     const newLocale = currentLocale === 'en' ? 'pt-BR' : 'en'
     const params = new URLSearchParams(searchParams.toString())
     params.set('locale', newLocale)
-    window.location.href = `${pathname}?${params.toString()}`
+    router.push(`${pathname}?${params.toString()}`)
   }
 
   return (
@@ -48,7 +49,7 @@ export const PortfolioNav = ({ portfolio }: PortfolioNavProps) => {
           {/* Language Switcher */}
           <button
             onClick={toggleLocale}
-            className="flex items-center gap-2 p-2 rounded-full border border-border/50 bg-background/50 hover:bg-background transition-colors"
+            className="flex items-center gap-2 p-2 rounded-full border border-border/50 bg-background/50 cursor-pointer!"
             aria-label={`Switch to ${currentLocale === 'en' ? 'Portuguese' : 'English'}`}
           >
             <Globe size={18} className="text-muted-foreground" />
