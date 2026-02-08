@@ -27,6 +27,7 @@ export function middleware(request: NextRequest) {
     response = NextResponse.redirect(url, 308)
   } else if (isMainDomain && isPortfolioPath) {
     response = new NextResponse('Not Found', { status: 404 })
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
   } else {
     response = NextResponse.next()
   }
