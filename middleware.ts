@@ -17,6 +17,19 @@ export function middleware(request: NextRequest) {
   const isMainDomain = hostname === 'sintese.dev' || hostname === 'www.sintese.dev'
   const isPortfolioPath = url.pathname === '/portfolio' || url.pathname.startsWith('/portfolio/')
 
+  if (url.pathname === '/__host_debug') {
+    const body = [
+      `hostname=${hostname}`,
+      `raw_host=${request.headers.get('host') ?? ''}`,
+      `x_forwarded_host=${request.headers.get('x-forwarded-host') ?? ''}`,
+      `match=${isMainDomain ? 'main' : isPortfolioDomain ? 'portfolio' : 'other'}`,
+    ].join('\n')
+    return new NextResponse(body, {
+      status: 200,
+      headers: { 'content-type': 'text/plain; charset=utf-8' },
+    })
+  }
+
   let response: NextResponse
 
   if (isPortfolioDomain && url.pathname === '/') {
@@ -31,7 +44,10 @@ export function middleware(request: NextRequest) {
     response = NextResponse.next()
   }
 
+  response.headers.set('x-middleware-ran', '1')
   response.headers.set('x-middleware-host', hostname)
+  response.headers.set('x-middleware-raw-host', request.headers.get('host') ?? '')
+  response.headers.set('x-middleware-raw-forwarded', request.headers.get('x-forwarded-host') ?? '')
   response.headers.set('x-middleware-match', isMainDomain ? 'main' : isPortfolioDomain ? 'portfolio' : 'other')
   return response
 }
