@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/betojsx/sintese26:latest
+    image: ghcr.io/betojsx/sintese26:${SOURCE_COMMIT:-latest}
     ports:
       - "3000:3000"
     environment:
