@@ -11,32 +11,22 @@ function getHostname(request: NextRequest): string {
 
 export function middleware(request: NextRequest) {
   const hostname = getHostname(request)
-  const url = request.nextUrl.clone()
 
   const isPortfolioDomain = hostname === 'roberto.sintese.dev'
   const isMainDomain = hostname === 'sintese.dev' || hostname === 'www.sintese.dev'
-  const isPortfolioPath = url.pathname === '/portfolio' || url.pathname.startsWith('/portfolio/')
 
-  let response: NextResponse
+  const response = NextResponse.next()
 
-  if (isPortfolioDomain && url.pathname === '/') {
-    url.pathname = '/portfolio'
-    response = NextResponse.rewrite(url)
-  } else if (isPortfolioDomain && isPortfolioPath) {
-    url.pathname = '/'
-    response = NextResponse.redirect(url, 308)
-  } else if (isMainDomain && isPortfolioPath) {
-    response = new NextResponse('Not Found', { status: 404 })
-    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
-  } else {
-    response = NextResponse.next()
-  }
-
+  // Add debugging headers
   response.headers.set('x-middleware-ran', '1')
   response.headers.set('x-middleware-host', hostname)
   response.headers.set('x-middleware-raw-host', request.headers.get('host') ?? '')
   response.headers.set('x-middleware-raw-forwarded', request.headers.get('x-forwarded-host') ?? '')
-  response.headers.set('x-middleware-match', isMainDomain ? 'main' : isPortfolioDomain ? 'portfolio' : 'other')
+  response.headers.set(
+    'x-middleware-match',
+    isMainDomain ? 'main' : isPortfolioDomain ? 'portfolio' : 'other',
+  )
+
   return response
 }
 
