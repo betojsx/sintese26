@@ -87,7 +87,7 @@ export const PortfolioHero = ({ hero }: PortfolioHeroProps) => {
               <div className="absolute top-10 right-10 w-full h-full border-2 border-primary/20 rounded-2xl z-0 transform translate-x-6 lg:translate-x-4 lg:translate-y-4"></div>
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-2xl"></div>
 
-              <div className="relative h-full w-full rounded-2xl overflow-hidden shadow-2xl z-10 bg-zinc-900/50 grayscale hover:grayscale-0 transition-all duration-700">
+              <div className="relative h-full w-full rounded-2xl overflow-hidden shadow-2xl z-10 bg-zinc-900/50">
                 <Image
                   src={profileImage?.url}
                   alt={`${hero?.firstName} ${hero?.lastName}`}
