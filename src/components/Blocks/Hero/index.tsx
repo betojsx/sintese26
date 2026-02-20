@@ -1,81 +1,89 @@
+'use client'
+
 import React from 'react'
-import { ArrowRight } from 'lucide-react'
-import Link from 'next/link'
-import Image from 'next/image'
+import dynamic from 'next/dynamic'
+import { motion } from 'motion/react'
 import { Page } from '@/payload-types'
-import { HeroVideo } from '@/components/HeroVideo'
-import DecryptedText from '@/components/DecryptedText'
+
+const Hero3D = dynamic(() => import('@/components/Hero3D').then((m) => m.Hero3D), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-transparent" />,
+})
 
 type HeroBlockProps = Extract<NonNullable<Page['layout']>[number], { blockType: 'hero' }>
 
-const HeroImages = () => (
-  <div className="relative w-full max-w-[820px] h-[700px] mx-auto">
-    {/* Mobile Image */}
-    <div className="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 lg:opacity-0 flex items-center justify-center">
-      <Image
-        src="/images/hero-img-mobile.png"
-        alt="Mobile Interface"
-        fill
-        className="object-contain"
-        priority
-      />
-    </div>
-
-    {/* Desktop Image */}
-    <div className="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 lg:opacity-100 flex items-center justify-center">
-      <Image
-        src="/images/hero-img-desktop.png"
-        alt="Desktop Interface"
-        fill
-        className="object-contain"
-        priority
-      />
-    </div>
-  </div>
-)
-
 export const HeroBlock: React.FC<HeroBlockProps> = ({ title, description, cta1, cta2 }) => {
   return (
-    <header className="relative w-full h-[70vh] min-h-[500px] overflow-hidden">
-      <HeroVideo />
+    <section className="relative min-h-screen w-full flex items-center bg-[#050505] overflow-hidden">
+      <div className="absolute inset-0 bg-linear-to-r from-[#050505] via-[#353131]/80 to-transparent z-0 pointer-events-none" />
 
-      <div className="absolute inset-0 z-10 bg-black/70 backdrop-blur-[2px] flex flex-col justify-center">
-        <div className="container mx-auto px-6 md:px-12 py-20">
-          <div className="max-w-4xl">
-            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9] mb-8 text-white max-w-3xl">
-              {title}
-            </h1>
-            <div className="text-lg mb-10 max-w-2xl leading-relaxed italic min-h-[3em]">
-              <DecryptedText
-                text={description}
-                animateOn="view"
-                speed={8}
-                maxIterations={16}
-                sequential
-                revealDirection="start"
-              />
-            </div>
-            <div className="flex flex-wrap gap-4">
-              {cta1?.label && (
-                <Link
-                  href={cta1.link || '#'}
-                  className="bg-primary text-primary-foreground! px-8 py-4 font-bold uppercase text-sm flex items-center gap-3 hover:translate-x-1 hover:-translate-y-1 transition-transform border-r-4 border-b-4 border-white/30"
-                >
-                  {cta1.label} <ArrowRight size={18} />
-                </Link>
-              )}
-              {cta2?.label && (
-                <Link
-                  href={cta2.link || '#'}
-                  className="border border-white/30 text-white px-8 py-4 font-bold uppercase text-sm hover:bg-white/10 transition-colors"
-                >
-                  {cta2.label}
-                </Link>
-              )}
-            </div>
+      <div
+        className="absolute inset-0 z-0 pointer-events-none opacity-40"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, rgba(255,255,255,0.2) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255,255,255,0.2) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, x: -50, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="text-left"
+        >
+          <span className="inline-block py-2 px-4 rounded-full border border-white/20 bg-white/5 text-sm font-mono tracking-widest text-white/70 mb-8 backdrop-blur-sm">
+            AGÊNCIA DE SOFTWARE SÍNTESE
+          </span>
+
+          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-white mb-8 leading-[1.1]">
+            {title}
+          </h1>
+
+          <p className="text-xl md:text-2xl text-white/60 max-w-xl mb-12 leading-relaxed font-light">
+            {description}
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-6">
+            {cta1?.label && (
+              <motion.a
+                href={cta1.link || '#contact'}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-10 py-5 bg-background  text-black font-bold text-lg rounded-lg tracking-wide hover:bg-gray-200 transition-colors text-center"
+              >
+                {cta1.label}
+              </motion.a>
+            )}
+            {cta2?.label && (
+              <motion.a
+                href={cta2.link || '#services'}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-10 py-5 bg-transparent border border-white/20 text-white font-medium text-lg rounded-lg tracking-wide hover:bg-white/5 transition-colors backdrop-blur-sm text-center"
+              >
+                {cta2.label}
+              </motion.a>
+            )}
           </div>
+        </motion.div>
+
+        <div className="h-[50vh] lg:h-screen w-full relative">
+          <Hero3D />
         </div>
       </div>
-    </header>
+
+      <motion.div
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/30 flex flex-col items-center gap-2 z-20"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <span className="text-[10px] font-mono uppercase tracking-widest">Scroll</span>
+        <div className="w-px h-12 bg-linear-to-b from-white/30 to-transparent" />
+      </motion.div>
+    </section>
   )
 }

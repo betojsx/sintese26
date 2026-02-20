@@ -54,7 +54,7 @@ export const ProtectedProjectCard: React.FC<ProtectedProjectCardProps> = ({
       <Link
         href={project.slug ? `${basePath}/${project.slug}` : '#'}
         onClick={handleCardClick}
-        className={`group relative overflow-hidden border border-zinc-800 transition-all hover:border-zinc-500 ${
+        className={`group relative overflow-hidden border border-white/10 bg-[#0a0a0a] transition-all hover:border-white/30 ${
           isPasswordProtected && !isUnlocked ? 'cursor-default' : 'cursor-pointer'
         } ${className}`}
       >
@@ -70,8 +70,8 @@ export const ProtectedProjectCard: React.FC<ProtectedProjectCardProps> = ({
             }`}
           />
         ) : (
-          <div className="h-full w-full bg-zinc-900 flex items-center justify-center">
-            <span className="text-zinc-700 font-mono text-xs">[NO IMAGE]</span>
+          <div className="h-full w-full bg-white/5 flex items-center justify-center">
+            <span className="text-white/40 font-mono text-xs">[NO IMAGE]</span>
           </div>
         )}
 
@@ -81,23 +81,23 @@ export const ProtectedProjectCard: React.FC<ProtectedProjectCardProps> = ({
         {/* Password protection overlay */}
         {isPasswordProtected && !isUnlocked && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm">
-            <div className="w-16 h-16 rounded-full bg-zinc-900/80 border border-zinc-700 flex items-center justify-center mb-3">
-              <Lock className="text-[#fdfcf0]" size={24} />
+            <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-3">
+              <Lock className="text-white" size={24} />
             </div>
-            <span className="text-[#fdfcf0] font-bold uppercase text-sm tracking-wider">
+            <span className="text-white font-bold uppercase text-sm tracking-wider">
               Protected
             </span>
-            <span className="text-zinc-500 text-xs mt-1">Click to unlock</span>
+            <span className="text-white/50 text-xs mt-1">Click to unlock</span>
           </div>
         )}
 
         {/* Title section - only show when not protected or unlocked */}
         {(!isPasswordProtected || isUnlocked) && (
           <div className="absolute inset-0 flex flex-col justify-end p-6 transition-transform duration-500 group-hover:translate-x-2">
-            <h3 className="text-xl font-bold uppercase tracking-tight text-[#fdfcf0]">
+            <h3 className="text-xl font-bold uppercase tracking-tight text-white">
               {project.title}
             </h3>
-            <div className="mt-2 h-0.5 w-0 bg-[#fdfcf0] transition-all duration-500 group-hover:w-16" />
+            <div className="mt-2 h-0.5 w-0 bg-white transition-all duration-500 group-hover:w-16" />
           </div>
         )}
       </Link>

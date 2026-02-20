@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import type { Project, Portfolio } from '@/payload-types'
 import { ProtectedProjectCard } from '@/components/ProtectedProjectCard'
+import { DotGridBackground } from '@/components/DotGridBackground'
 
 interface ProjectsBlockProps {
   projects: Project[]
@@ -12,7 +13,7 @@ interface ProjectsBlockProps {
 }
 
 const PlaceholderCard = ({ className = '' }: { className?: string }) => {
-  return <div className={`border border-zinc-800/30 bg-zinc-900/10 ${className}`} />
+  return <div className={`border border-white/10 bg-[#0a0a0a] rounded-2xl ${className}`} />
 }
 
 export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({
@@ -43,25 +44,20 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({
   }
 
   return (
-    <section id="work" className="px-6 md:px-12 py-24 border-b border-zinc-800 bg-[#0a0a0a]">
-      <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4 text-[#fdfcf0]">
-              {projectsSection?.title || 'Selected Works'}
-            </h2>
-            <p className="text-zinc-500 uppercase text-xs tracking-[0.2em] font-medium">
-              {projectsSection?.subtitle || 'A Showcase of Technical Excellence • 2024-2026'}
-            </p>
-          </div>
-          <div className="text-right hidden md:block">
-            <span className="text-zinc-800 text-8xl font-black opacity-50">
-              {projectsSection?.sectionNumber || '02'}
-            </span>
-          </div>
+    <section id="work" className="relative py-24 px-8 md:px-16 border-t border-white/5 bg-[#050505]">
+      <DotGridBackground />
+
+      <div className="relative z-10 max-w-7xl w-full mx-auto">
+        <div className="mb-16">
+          <span className="font-mono text-xs text-white/40 tracking-widest uppercase mb-2 block">
+            {projectsSection?.subtitle || 'Portfolio'}
+          </span>
+          <h2 className="text-4xl font-bold text-white">
+            {projectsSection?.title || 'Selected Works'}
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {displayItems.map((item, i) => {
             const gridClass = getBentoClass(i)
 
@@ -74,7 +70,7 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({
               <ProtectedProjectCard
                 key={project.id}
                 project={project}
-                className={gridClass}
+                className={`${gridClass} rounded-2xl border-white/10 bg-[#0a0a0a]`}
                 isPasswordProtected={project.isPasswordProtected || false}
                 basePath={basePath}
               />
@@ -85,7 +81,7 @@ export const ProjectsBlock: React.FC<ProjectsBlockProps> = ({
         <div className="flex justify-center mt-12">
           <Link
             href={viewAllLink}
-            className="border border-zinc-800 px-12 py-4 font-bold uppercase text-xs tracking-widest text-zinc-400 hover:text-[#fdfcf0] hover:bg-zinc-900 transition-all flex items-center gap-3 group"
+            className="border border-white/10 px-12 py-4 font-bold uppercase text-xs tracking-widest text-white/40 hover:text-white hover:bg-white/5 transition-all flex items-center gap-3 group rounded-full"
           >
             {projectsSection?.viewAllLabel || 'View all projects'}{' '}
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
