@@ -30,8 +30,11 @@ export const ContactBlock: React.FC<ContactBlockProps> = ({
   }
 
   return (
-    <section id="contact" className="bg-[#050505] border-t border-white/10 pt-24 pb-0 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-8">
+    <section
+      id="contact"
+      className="bg-[#050505] border-t border-white/10 pt-24 pb-0 relative overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
           <div className="space-y-12">
             <div>
@@ -47,14 +50,11 @@ export const ContactBlock: React.FC<ContactBlockProps> = ({
               </p>
             </div>
 
-            <div className="hidden lg:block">
+            <div className="order-3 lg:order-1 lg:block">
               <InteractiveKeyboard />
-              <p className="text-center text-white/20 text-xs font-mono mt-4">
-                Pressione qualquer tecla para testar a resposta do sistema.
-              </p>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="order-1 lg:order-2 flex flex-col gap-4">
               {email && (
                 <a
                   href={`mailto:${email}`}
@@ -89,7 +89,7 @@ export const ContactBlock: React.FC<ContactBlockProps> = ({
             </div>
           </div>
 
-          <div className="bg-white/5 border border-white/10 p-8 rounded-2xl backdrop-blur-sm">
+          <div className="order-3 lg:order-3 bg-white/5 border border-white/10 p-8 rounded-2xl backdrop-blur-sm">
             <h3 className="text-xl font-bold text-white mb-6">Envie uma mensagem</h3>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-2 gap-6">

@@ -30,7 +30,13 @@ function DigitalCore() {
       </mesh>
       <mesh scale={0.5}>
         <octahedronGeometry args={[2, 0]} />
-        <meshStandardMaterial color="#444" transparent opacity={0.8} />
+        <meshStandardMaterial 
+          color="#ffffff" 
+          roughness={0.2} 
+          metalness={0.8}
+          transparent 
+          opacity={0.9} 
+        />
       </mesh>
     </Float>
   )
@@ -59,9 +65,20 @@ export function Hero3D() {
         onCreated={handleCreated}
       >
         <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} color="blue" />
-        <directionalLight position={[5, 5, 5]} intensity={0.5} />
+        
+        {/* Main light from the "middle" (left side relative to object) - Increased intensity */}
+        <spotLight 
+          position={[-10, 5, 10]} 
+          angle={0.5} 
+          penumbra={1} 
+          intensity={50} 
+          color="#ffffff" 
+          distance={50}
+        />
+        
+        {/* Fill light */}
+        <pointLight position={[5, -5, 5]} intensity={10} color="#4a4a4a" />
+
         <DigitalCore />
       </Canvas>
     </div>

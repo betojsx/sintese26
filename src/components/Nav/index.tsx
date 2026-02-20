@@ -50,10 +50,6 @@ export const Nav = async () => {
           Contato
         </Link>
       </div>
-
-      <button className="bg-primary text-primary-foreground px-4 py-2 text-xs font-bold uppercase tracking-tighter hover:bg-primary/90 transition-colors">
-        Iniciar Projeto
-      </button>
     </nav>
   )
 }

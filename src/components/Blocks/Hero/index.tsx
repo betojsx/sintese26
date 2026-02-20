@@ -14,7 +14,7 @@ type HeroBlockProps = Extract<NonNullable<Page['layout']>[number], { blockType: 
 
 export const HeroBlock: React.FC<HeroBlockProps> = ({ title, description, cta1, cta2 }) => {
   return (
-    <section className="relative min-h-screen w-full flex items-center bg-[#050505] overflow-hidden">
+    <section className="relative min-h-[80vh] w-full flex bg-[#050505] overflow-hidden">
       <div className="absolute inset-0 bg-linear-to-r from-[#050505] via-[#353131]/80 to-transparent z-0 pointer-events-none" />
 
       <div
@@ -35,43 +35,32 @@ export const HeroBlock: React.FC<HeroBlockProps> = ({ title, description, cta1, 
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="text-left"
         >
-          <span className="inline-block py-2 px-4 rounded-full border border-white/20 bg-white/5 text-sm font-mono tracking-widest text-white/70 mb-8 backdrop-blur-sm">
-            AGÊNCIA DE SOFTWARE SÍNTESE
+          <span className="inline-block py-2 px-4 rounded-full border border-white/20 bg-white/5 text-sm font-mono tracking-widest text-white/70 mb-2 backdrop-blur-sm">
+            AGÊNCIA DE SOFTWARE
           </span>
 
           <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-white mb-8 leading-[1.1]">
             {title}
           </h1>
 
-          <p className="text-xl md:text-2xl text-white/60 max-w-xl mb-12 leading-relaxed font-light">
+          <p className="text-xl md:text-2xl text-white/60 max-w-xl !mb-12 leading-relaxed font-light block">
             {description}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6">
             {cta1?.label && (
-              <motion.a
+              <a
                 href={cta1.link || '#contact'}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-10 py-5 bg-background  text-black font-bold text-lg rounded-lg tracking-wide hover:bg-gray-200 transition-colors text-center"
+                className="shimmer-button relative px-10 py-5 font-bold text-lg rounded-lg tracking-wide bg-background/10 hover:bg-background/20 transition-colors duration-500 text-center overflow-hidden"
               >
-                {cta1.label}
-              </motion.a>
-            )}
-            {cta2?.label && (
-              <motion.a
-                href={cta2.link || '#services'}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-10 py-5 bg-transparent border border-white/20 text-white font-medium text-lg rounded-lg tracking-wide hover:bg-white/5 transition-colors backdrop-blur-sm text-center"
-              >
-                {cta2.label}
-              </motion.a>
+                <span className="relative z-10">{cta1.label}</span>
+                <span className="shimmer-beam" />
+              </a>
             )}
           </div>
         </motion.div>
 
-        <div className="h-[50vh] lg:h-screen w-full relative">
+        <div className="h-full w-full relative">
           <Hero3D />
         </div>
       </div>
