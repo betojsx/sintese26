@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { headers } from 'next/headers'
 import { RenderBlocks } from '@/components/Blocks/RenderBlocks'
-import { DefaultHome } from '@/components/DefaultHome'
+
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import { PortfolioNav } from '@/components/PortfolioNav'
@@ -93,11 +93,6 @@ export default async function App({
   const siteSettings = await payload.findGlobal({
     slug: 'site-settings',
   })
-
-  // Fallback if no homepage is defined in CMS
-  if (!homePage) {
-    return <DefaultHome projects={projects} />
-  }
 
   // Extract WhatsApp number from Contact block if present, to pass to Footer
   const contactBlock = homePage.layout?.find((block) => block.blockType === 'contact')
