@@ -612,6 +612,9 @@ export interface Portfolio {
     } | null;
     ctaLabel?: string | null;
     profileImage?: (number | null) | Media;
+    /**
+     * Used in the V3 Connect card icons and handle labels.
+     */
     socialLinks?: {
       github?: string | null;
       linkedin?: string | null;

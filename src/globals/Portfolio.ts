@@ -136,19 +136,37 @@ export const Portfolio: GlobalConfig = {
           name: 'socialLinks',
           type: 'group',
           label: {
-            en: 'Social Links',
-            pt: 'Links Sociais',
+            en: 'Connect Links (V3)',
+            pt: 'Links de Contato (V3)',
+          },
+          admin: {
+            description: {
+              en: 'Used in the V3 Connect card icons and handle labels.',
+              pt: 'Usado nos icones e labels de handle do card Connect da V3.',
+            },
           },
           fields: [
             {
               name: 'github',
               type: 'text',
-              label: 'GitHub URL',
+              label: {
+                en: 'GitHub Link',
+                pt: 'Link do GitHub',
+              },
+              admin: {
+                placeholder: 'https://github.com/your-handle',
+              },
             },
             {
               name: 'linkedin',
               type: 'text',
-              label: 'LinkedIn URL',
+              label: {
+                en: 'LinkedIn Link',
+                pt: 'Link do LinkedIn',
+              },
+              admin: {
+                placeholder: 'https://linkedin.com/in/your-handle',
+              },
             },
             {
               name: 'email',
@@ -156,6 +174,9 @@ export const Portfolio: GlobalConfig = {
               label: {
                 en: 'Email',
                 pt: 'E-mail',
+              },
+              admin: {
+                placeholder: 'you@example.com',
               },
             },
           ],
