@@ -124,14 +124,11 @@ export const PortfolioV3Page = async ({ locale }: PortfolioV3PageProps) => {
           className="flex min-h-[420px] flex-col justify-end"
         >
           <div className="absolute right-6 top-6 flex items-center gap-3">
-            <span className="hidden font-mono text-xs text-white/20 md:block">
-              {locale === 'en' ? 'AVAILABLE FOR WORK' : 'DISPONIVEL PARA PROJETOS'}
-            </span>
             <PortfolioV3LocaleToggle currentLocale={locale} />
           </div>
 
           {profileImage?.url && (
-            <div className="relative mb-3 h-16 w-16 overflow-hidden rounded-full border border-white/10">
+            <div className="relative mb-3 h-18 w-18 overflow-hidden rounded-full border border-white/10">
               <Image src={profileImage.url} alt={fullName} fill className="object-cover" />
             </div>
           )}
@@ -290,7 +287,7 @@ export const PortfolioV3Page = async ({ locale }: PortfolioV3PageProps) => {
               )
             })}
 
-            {Array.from({ length: 2 }).map((_, index) => (
+            {Array.from({ length: 3 - projects.length }).map((_, index) => (
               <div
                 key={`empty-slot-${index}`}
                 className="flex min-h-[360px] cursor-default flex-col items-center justify-center rounded-xl border border-dashed border-white/5 bg-[#0A0A0A]/50 p-8 text-white/10 transition-all hover:border-white/10 hover:text-white/20"
