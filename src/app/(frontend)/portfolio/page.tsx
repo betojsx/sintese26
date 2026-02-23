@@ -1,5 +1,5 @@
 import { headers } from 'next/headers'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 
 import { PortfolioV3Page } from '@/components/portfolio/PortfolioV3Page'
 
@@ -28,10 +28,6 @@ export default async function PortfolioPage({
 
   if (isMainDomain) {
     notFound()
-  }
-
-  if (isPortfolioDomain) {
-    redirect('/')
   }
 
   return <PortfolioV3Page locale={locale} />

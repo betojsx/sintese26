@@ -11,21 +11,18 @@ function getHostname(request: NextRequest): string {
 
 export function middleware(request: NextRequest) {
   const hostname = getHostname(request)
+  const pathname = request.nextUrl.pathname
 
   const isPortfolioDomain = hostname === 'roberto.sintese.dev'
   const isMainDomain = hostname === 'sintese.dev' || hostname === 'www.sintese.dev'
 
-  const response = NextResponse.next()
+  if (isPortfolioDomain && pathname === '/') {
+    const rewriteURL = request.nextUrl.clone()
+    rewriteURL.pathname = '/portfolio'
+    return NextResponse.rewrite(rewriteURL)
+  }
 
-  // Add debugging headers
-  response.headers.set('x-middleware-ran', '1')
-  response.headers.set('x-middleware-host', hostname)
-  response.headers.set('x-middleware-raw-host', request.headers.get('host') ?? '')
-  response.headers.set('x-middleware-raw-forwarded', request.headers.get('x-forwarded-host') ?? '')
-  response.headers.set(
-    'x-middleware-match',
-    isMainDomain ? 'main' : isPortfolioDomain ? 'portfolio' : 'other',
-  )
+  const response = NextResponse.next()
 
   return response
 }
