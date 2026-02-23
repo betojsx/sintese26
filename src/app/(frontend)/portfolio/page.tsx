@@ -1,7 +1,6 @@
+import { PortfolioV3Page } from '@/components/portfolio/PortfolioV3Page'
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
-
-import { PortfolioV3Page } from '@/components/portfolio/PortfolioV3Page'
 
 export const dynamic = 'force-dynamic'
 

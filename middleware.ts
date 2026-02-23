@@ -14,7 +14,6 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
   const isPortfolioDomain = hostname === 'roberto.sintese.dev'
-  const isMainDomain = hostname === 'sintese.dev' || hostname === 'www.sintese.dev'
 
   if (isPortfolioDomain && pathname === '/') {
     const rewriteURL = request.nextUrl.clone()
